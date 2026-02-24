@@ -3,20 +3,20 @@ import * as t from "drizzle-orm/pg-core";
 
 export const accountTypesEnum = pgEnum("account_types", ["asset", "liability", "equity", "revenue", "expense"]);
 
-export const users = pgTable("users", {
+export const usersTable = pgTable("users", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
     name: t.varchar().notNull(),
     email: t.varchar().notNull().unique(),
     image: t.text()
 });
 
-export const companies = pgTable("companies", {
+export const companiesTable = pgTable("companies", {
     id: t.uuid().primaryKey().defaultRandom(),
     userId: t.integer("user_id").references(() => users.id),
     name: t.varchar().notNull(),
 });
 
-export const accounts = pgTable("accounts", {
+export const accountsTable = pgTable("accounts", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
     companyId: t.uuid("company_id").references(() => companies.id),
     code: t.integer().notNull(),
@@ -24,7 +24,7 @@ export const accounts = pgTable("accounts", {
     balance: t.numeric().notNull()
 });
 
-export const journalEntries = pgTable("journal_entries", {
+export const journalEntriesTable = pgTable("journal_entries", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
     companyId: t.uuid("company_id").references(() => companies.id),
     number: t.varchar().notNull(),
@@ -32,7 +32,7 @@ export const journalEntries = pgTable("journal_entries", {
     description: t.text()
 });
 
-export const journalEntryDetails = pgTable("journal_entry_details", {
+export const journalEntryDetailsTable = pgTable("journal_entry_details", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
     journalEntryId: t.integer("journal_entry_id").references(() => journalEntries.id),
     amount: t.numeric().notNull()
