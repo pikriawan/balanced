@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createCompany } from "../../actions/company";
 import { getCompanies } from "../../data/company";
 
@@ -19,9 +20,11 @@ export default async function CompaniesPage() {
                 </button>
             </form>
             {companies.length > 0 ? (
-                <div className="flex flex-col gap-4 items-start">
+                <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
                     {companies.map((company) => (
-                        <div className="p-4 rounded-lg border border-neutral-500" key={company.id}>{company.name}</div>
+                        <Link className="p-4 rounded-lg border border-neutral-500" href={`/company/${company.id}`} key={company.id}>
+                            {company.name}
+                        </Link>
                     ))}
                 </div>
             ) : (
