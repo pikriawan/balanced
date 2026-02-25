@@ -10,19 +10,10 @@ export async function getCompanies() {
         return null;
     }
 
-    const users = await db
-        .select()
-        .from(usersTable)
-        .where(eq(usersTable.email, session.user.email));
-
-    if (users.length === 0) {
-        return null;
-    }
-
     const companies = await db
         .select()
         .from(companiesTable)
-        .where(eq(companiesTable.userId, users[0].id));
+        .where(eq(companiesTable.userId, session.user.id));
 
     return companies;
 }

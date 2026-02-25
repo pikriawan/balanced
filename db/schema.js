@@ -11,14 +11,14 @@ export const usersTable = pgTable("users", {
 });
 
 export const companiesTable = pgTable("companies", {
-    id: t.uuid().primaryKey().defaultRandom(),
-    userId: t.integer("user_id").references(() => users.id),
+    id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+    userId: t.integer("user_id").references(() => usersTable.id),
     name: t.varchar().notNull(),
 });
 
 export const accountsTable = pgTable("accounts", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-    companyId: t.uuid("company_id").references(() => companies.id),
+    companyId: t.integer("company_id").references(() => companiesTable.id),
     code: t.integer().notNull(),
     type: accountTypesEnum().notNull(),
     balance: t.numeric().notNull()
@@ -26,7 +26,7 @@ export const accountsTable = pgTable("accounts", {
 
 export const journalEntriesTable = pgTable("journal_entries", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-    companyId: t.uuid("company_id").references(() => companies.id),
+    companyId: t.integer("company_id").references(() => companiesTable.id),
     number: t.varchar().notNull(),
     date: t.date().notNull(),
     description: t.text()
@@ -34,6 +34,6 @@ export const journalEntriesTable = pgTable("journal_entries", {
 
 export const journalEntryDetailsTable = pgTable("journal_entry_details", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-    journalEntryId: t.integer("journal_entry_id").references(() => journalEntries.id),
+    journalEntryId: t.integer("journal_entry_id").references(() => journalEntriesTable.id),
     amount: t.numeric().notNull()
 });

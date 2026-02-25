@@ -13,19 +13,10 @@ export async function createCompany(formData) {
         return;
     }
 
-    const users = await db
-        .select()
-        .from(usersTable)
-        .where(eq(usersTable.email, session.user.email));
-
-    if (users.length === 0) {
-        return;
-    }
-
     await db
         .insert(companiesTable)
         .values({
-            userId: users[0].id,
+            userId: session.user.id,
             name: formData.get("name")
         });
 
