@@ -19,9 +19,10 @@ export const companiesTable = pgTable("companies", {
 export const accountsTable = pgTable("accounts", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
     companyId: t.integer("company_id").references(() => companiesTable.id),
-    code: t.integer().notNull(),
+    code: t.varchar().notNull(),
     type: accountTypesEnum().notNull(),
-    balance: t.numeric().notNull()
+    name: t.varchar().notNull(),
+    isCash: t.boolean("is_cash").notNull()
 });
 
 export const journalEntriesTable = pgTable("journal_entries", {
@@ -35,5 +36,7 @@ export const journalEntriesTable = pgTable("journal_entries", {
 export const journalEntryDetailsTable = pgTable("journal_entry_details", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
     journalEntryId: t.integer("journal_entry_id").references(() => journalEntriesTable.id),
-    amount: t.numeric().notNull()
+    accountId: t.integer("account_id").references(() => accountsTable.id),
+    debit: t.numeric().default("0"),
+    credit: t.numeric().default("0")
 });
