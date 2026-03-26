@@ -1,6 +1,6 @@
-import { auth } from "./lib/auth";
+import { auth } from "@/lib/auth";
 
-const publicRoutes = ["/"];
+const publicRoutes = ["/", "/sign-in"];
 
 export default auth(async function middleware(req) {
     const isPublicRoute = publicRoutes.some((route) => {

@@ -1,10 +1,11 @@
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { Geist } from "next/font/google";
+import "@/app/globals.css";
+import ErudaNoSsr from "@/components/eruda-no-ssr";
 
-const inter = Inter({
+const geist = Geist({
     subsets: ["latin"],
     display: "swap",
-    variable: "--font-inter"
+    variable: "--font-geist"
 });
 
 export const metadata = {
@@ -13,9 +14,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
-        <html className={`${inter.variable} antialiased w-full h-full`}>
-            <body className="w-full h-full">
+        <html className={`${geist.variable} antialiased bg-neutral-950`}>
+            <body className="bg-neutral-950 text-neutral-50">
                 {children}
+                {process.env.NODE_ENV !== "production" && <ErudaNoSsr />}
             </body>
         </html>
     );

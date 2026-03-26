@@ -1,35 +1,26 @@
-import Link from "next/link";
-import { createCompany } from "../../actions/company";
-import { getCompanies } from "../../data/company";
+import { Plus } from "lucide-react";
+import { createCompany } from "@/actions/company";
+import Companies from "@/components/companies";
+import CreateCompanyForm from "@/components/create-company-form";
+import Button from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
-export default async function CompaniesPage() {
-    const companies = await getCompanies();
-
-    console.log(companies);
-
+export default function CompainesPage() {
     return (
-        <div className="p-4 flex flex-col gap-4">
-            <h1 className="text-4xl font-semibold tracking-tighter">Perusahaan</h1>
-            <form className="flex flex-col gap-4 items-start" action={createCompany}>
-                <div className="flex flex-col gap-2">
-                    <label htmlFor="companyName">Nama perusahaan</label>
-                    <input className="px-4 py-2 rounded-lg focus:outline-0 border border-neutral-500 focus:border-neutral-900" id="companyName" name="name" />
-                </div>
-                <button className="flex justify-center items-center px-4 py-2 rounded-lg bg-neutral-900 text-white cursor-pointer">
-                    Buat perusahaan baru
-                </button>
-            </form>
-            {companies.length > 0 ? (
-                <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    {companies.map((company) => (
-                        <Link className="p-4 rounded-lg border border-neutral-500" href={`/company/${company.id}/accounts`} key={company.id}>
-                            {company.name}
-                        </Link>
-                    ))}
-                </div>
-            ) : (
-                <p>Kamu belum membuat perusahaan apapun</p>
-            )}
-        </div>
+        <main className="p-4 flex flex-col justify-start gap-4">
+            <h1 className="font-medium text-2xl">Perusahaan</h1>
+            <Dialog>
+                <DialogTrigger>
+                    <Button>
+                        <Plus size={16} />
+                        Buat perusahaan baru
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <CreateCompanyForm />
+                </DialogContent>
+            </Dialog>
+            <Companies />
+        </main>
     );
 }

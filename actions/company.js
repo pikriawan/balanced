@@ -13,12 +13,27 @@ export async function createCompany(formData) {
         return;
     }
 
+    const name = formData.get("name").trim();
+
+    if (name.length < 5) {
+        return {
+            success: false,
+            error: {
+                name: "\"name\" setidaknya harus memiliki panjang 5 karakter"
+            }
+        };
+    }
+
     await db
         .insert(companiesTable)
         .values({
             userId: session.user.id,
-            name: formData.get("name")
+            name
         });
 
     refresh();
+
+    return {
+        success: true
+    };
 }
