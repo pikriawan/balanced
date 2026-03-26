@@ -22,7 +22,7 @@ export default async function CompaniesPage() {
             {companies.length > 0 ? (
                 <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
                     {companies.map((company) => (
-                        <Link className="p-4 rounded-lg border border-neutral-500" href={`/company/${company.id}`} key={company.id}>
+                        <Link className="p-4 rounded-lg border border-neutral-500" href={`/company/${company.id}/accounts`} key={company.id}>
                             {company.name}
                         </Link>
                     ))}

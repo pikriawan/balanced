@@ -13,8 +13,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
-        <html className={`${inter.variable} antialiased`}>
-            <body>
+        <html className={`${inter.variable} antialiased w-full h-full`}>
+            <body className="w-full h-full">
                 {children}
             </body>
         </html>
