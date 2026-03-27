@@ -1,21 +1,41 @@
+import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 
-const publicRoutes = ["/", "/sign-in"];
+const guestRoutes = {
+    exact: ["/", "/signin"],
+    start: []
+};
 
-export default auth(async function middleware(req) {
-    const isPublicRoute = publicRoutes.some((route) => {
-        if (typeof route === "string") {
-            return route === req.nextUrl.pathname;
-        }
+const userRoutes = {
+    exact: ["/companies", "/signout"],
+    start: ["/company"]
+};
 
-        return route.test(req.nextUrl.pathname);
-    });
+function matchRoute(pathname, routes) {
+    return routes.exact.includes(pathname) || routes.start.some((route) => pathname.startsWith(route));
+}
 
-    if (!req.auth && !isPublicRoute) {
-        return Response.redirect(new URL("/", req.nextUrl.origin));
+export default auth(async function middleware(request) {
+    const pathname = request.nextUrl.pathname;
+    const isAuthenticated = !!request.auth;
+
+    if (!isAuthenticated && matchRoute(pathname, userRoutes)) {
+        return NextResponse.redirect(new URL("/signin", request.url));
     }
+
+    if (isAuthenticated && matchRoute(pathname, guestRoutes)) {
+        return NextResponse.redirect(new URL("/companies", request.url));
+    }
+
+    return NextResponse.next();
 });
 
 export const config = {
-    matcher: "/((?!api|_next/static|_next/image|favicon.ico).*)"
+    matcher: [
+        "/",
+        "/companies",
+        "/company/:path*",
+        "/signin",
+        "/signout"
+    ]
 };

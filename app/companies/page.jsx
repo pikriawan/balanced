@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export default function CompainesPage() {
     return (
-        <main className="p-4 flex flex-col justify-start gap-4">
+        <main className="p-4 flex flex-col items-start gap-4">
             <h1 className="font-medium text-2xl">Perusahaan</h1>
             <Dialog>
                 <DialogTrigger>

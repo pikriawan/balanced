@@ -1,18 +1,18 @@
 import Button from "@/components/ui/button";
-import { signIn } from "@/lib/auth";
+import { signOut } from "@/lib/auth";
 
-export default function HomePage() {
+export default function SignOutPage() {
     return (
         <main className="p-4 flex flex-col items-start gap-4">
-            <h1 className="font-medium text-2xl">Sign In</h1>
+            <h1 className="font-medium text-2xl">Sign Out</h1>
             <form
                 action={async () => {
                     "use server";
 
-                    await signIn("google", { redirectTo: "/companies" });
+                    await signOut({ redirectTo: "/signin" });
                 }}
             >
-                <Button>Sign in with Google</Button>
+                <Button variant="danger">Sign out</Button>
             </form>
         </main>
     );
