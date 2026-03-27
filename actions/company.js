@@ -1,10 +1,9 @@
 "use server";
 
-import { eq } from "drizzle-orm";
 import { refresh } from "next/cache";
-import { companiesTable, usersTable } from "../db/schema";
-import { auth } from "../lib/auth";
-import db from "../lib/db";
+import { companiesTable, usersTable } from "@/db/schema";
+import { auth } from "@/lib/auth";
+import db from "@/lib/db";
 
 export async function createCompany(formData) {
     const session = await auth();
@@ -13,14 +12,22 @@ export async function createCompany(formData) {
         return;
     }
 
-    const name = formData.get("name").trim();
+    const rawFormData = {
+        name: formData.get("name")
+    };
 
-    if (name.length < 5) {
+    const error = {
+        name: []
+    };
+
+    if (rawFormData.name.length < 5) {
+        error.name.push("Nama perusahaan harus memiliki setidaknya 5 karakter")
+    }
+
+    if (Object.values(error).some((errors) => errors.length)) {
         return {
             success: false,
-            error: {
-                name: "\"name\" setidaknya harus memiliki panjang 5 karakter"
-            }
+            error
         };
     }
 
@@ -28,7 +35,7 @@ export async function createCompany(formData) {
         .insert(companiesTable)
         .values({
             userId: session.user.id,
-            name
+            name: rawFormData.name
         });
 
     refresh();

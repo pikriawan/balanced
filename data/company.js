@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
-import { companiesTable, usersTable } from "../db/schema";
-import { auth } from "../lib/auth";
-import db from "../lib/db";
+import { companiesTable, usersTable } from "@/db/schema";
+import { auth } from "@/lib/auth";
+import db from "@/lib/db";
 
 export async function getCompanies() {
     const session = await auth();

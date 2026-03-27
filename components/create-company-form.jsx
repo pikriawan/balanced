@@ -34,8 +34,14 @@ export default function CreateCompanyForm() {
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
             <Field>
                 <FieldLabel htmlFor="createCompany_name">Nama perusahaan</FieldLabel>
-                <TextField ref={textFieldRef} id="createCompany_name" name="name" placeholder="Acme Inc." />
-                {error.name && <p className="text-red-500 text-sm">{error.name}</p>}
+                <TextField ref={textFieldRef} id="createCompany_name" name="name" placeholder="Perusahaan Sukses Besar" />
+                {error.name && (
+                    <Field>
+                        {error.name.map((e) => (
+                            <p className="text-red-500 text-sm" key={e}>{e}</p>
+                        ))}
+                    </Field>
+                )}
             </Field>
             <div className="flex gap-4 items-center">
                 <DialogClose className="w-full">
