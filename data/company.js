@@ -25,7 +25,7 @@ export async function getCompany(id) {
         return null;
     }
 
-    const companiesSelect = await db
+    const companies = await db
         .select()
         .from(companiesTable)
         .where(
@@ -35,9 +35,9 @@ export async function getCompany(id) {
             )
         );
 
-    if (companiesSelect.length === 0) {
+    if (companies.length === 0) {
         return null;
     }
 
-    return companiesSelect[0];
+    return companies[0];
 }

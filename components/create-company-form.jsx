@@ -27,7 +27,9 @@ export default function CreateCompanyForm() {
     }
 
     useEffect(() => {
-        textFieldRef.current.focus();
+        if (isShow) {
+            textFieldRef.current.focus();
+        }
     }, [isShow]);
 
     return (
