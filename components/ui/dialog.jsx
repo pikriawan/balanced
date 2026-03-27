@@ -36,7 +36,7 @@ export function DialogClose({ children, ...props }) {
 }
 
 export function DialogContent({ className, children, ...props }) {
-    const { isShow, setIsShow } = useContext(DialogContext);
+    const { isShow } = useContext(DialogContext);
 
     return isShow && (
         <>
