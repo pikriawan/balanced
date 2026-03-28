@@ -51,7 +51,7 @@ export async function createAccount(companyId, formData) {
     if (!validatedFields.success) {
         return {
             success: false,
-            error: validatedFields.error.flatten().fieldErrors
+            error: z.flattenError(validatedFields.error).fieldErrors
         };
     }
 
