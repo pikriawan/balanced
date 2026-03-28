@@ -1,4 +1,4 @@
-import { Trash2 } from "lucide-react";
+import { SquarePen, Trash2 } from "lucide-react";
 import Link from "next/link";
 import DeleteCompanyForm from "@/components/delete-company-form";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -16,6 +16,16 @@ export default async function Companies() {
                             {company.name}
                         </p>
                     </Link>
+                    <Dialog>
+                        <div className="flex items-center pr-4 py-2">
+                            <DialogTrigger>
+                                <SquarePen size={16} color="oklch(98.5% 0 0)" />
+                            </DialogTrigger>
+                        </div>
+                        <DialogContent>
+                            <h2>Content goes here</h2>
+                        </DialogContent>
+                    </Dialog>
                     <Dialog>
                         <div className="flex items-center pr-4 py-2">
                             <DialogTrigger>

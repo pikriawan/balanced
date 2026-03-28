@@ -12,13 +12,13 @@ export const usersTable = pgTable("users", {
 
 export const companiesTable = pgTable("companies", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-    userId: t.integer("user_id").references(() => usersTable.id),
+    userId: t.integer("user_id").references(() => usersTable.id, { onDelete: "cascade" }),
     name: t.varchar().notNull(),
 });
 
 export const accountsTable = pgTable("accounts", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-    companyId: t.integer("company_id").references(() => companiesTable.id),
+    companyId: t.integer("company_id").references(() => companiesTable.id, { onDelete: "cascade" }),
     code: t.varchar().notNull(),
     type: accountTypesEnum().notNull(),
     name: t.varchar().notNull(),
@@ -27,7 +27,7 @@ export const accountsTable = pgTable("accounts", {
 
 export const journalEntriesTable = pgTable("journal_entries", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-    companyId: t.integer("company_id").references(() => companiesTable.id),
+    companyId: t.integer("company_id").references(() => companiesTable.id, { onDelete: "cascade" }),
     number: t.varchar().notNull(),
     date: t.date().notNull(),
     description: t.text()
@@ -35,8 +35,8 @@ export const journalEntriesTable = pgTable("journal_entries", {
 
 export const journalEntryDetailsTable = pgTable("journal_entry_details", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-    journalEntryId: t.integer("journal_entry_id").references(() => journalEntriesTable.id),
-    accountId: t.integer("account_id").references(() => accountsTable.id),
+    journalEntryId: t.integer("journal_entry_id").references(() => journalEntriesTable.id, { onDelete: "cascade" }),
+    accountId: t.integer("account_id").references(() => accountsTable.id, { onDelete: "cascade" }),
     debit: t.numeric().default("0"),
     credit: t.numeric().default("0")
 });
