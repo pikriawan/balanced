@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { createAccount } from "@/actions/account";
 import Button from "@/components/ui/button";
 import { DialogClose, DialogContext } from "@/components/ui/dialog";
@@ -11,18 +11,18 @@ import TextField from "@/components/ui/text-field";
 export default function CreateCompanyForm({ companyId }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
-    const { setIsShow } = useContext(DialogContext);
+    const { isShow, setIsShow } = useContext(DialogContext);
+    const autoFocusRef = useRef(null);
 
     async function onSubmit(event) {
         event.preventDefault();
 
         const formData = new FormData(event.target);
-        const createAccountWithCompanyId = createAccount.bind(null, companyId);
 
         setIsPending(true);
         setError(null);
 
-        const response = await createAccountWithCompanyId(formData);
+        const response = await createAccount(companyId, formData);
 
         setIsPending(false);
 
@@ -33,11 +33,17 @@ export default function CreateCompanyForm({ companyId }) {
         }
     }
 
+    useEffect(() => {
+        if (isShow) {
+            autoFocusRef.current.focus();
+        }
+    }, [isShow]);
+
     return (
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
             <Field>
                 <FieldLabel htmlFor="createAccount_code">Kode akun</FieldLabel>
-                <TextField id="createAccount_code" name="code" placeholder="1-1000" />
+                <TextField id="createAccount_code" name="code" placeholder="1-1000" ref={autoFocusRef} />
                 {error?.code?.length > 0 && (
                     <Field>
                         {error.code.map((e) => (

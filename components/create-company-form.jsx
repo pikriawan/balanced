@@ -29,7 +29,6 @@ export default function CreateCompanyForm() {
             setIsShow(false);
         } else {
             setError(response.error);
-            autoFocusRef.current.focus();
         }
     }
 
