@@ -1,6 +1,7 @@
 import { ChevronLeft, EllipsisVertical } from "lucide-react";
 import Link from "next/link";
 import CompanyNavigation from "@/components/company-navigation";
+import CompanySheetNavigation from "@/components/company-sheet-navigation";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { getCompany } from "@/data/company";
 
@@ -25,7 +26,7 @@ export default async function CompanyLayout({ children, params }) {
                         <EllipsisVertical size={16} />
                     </SheetTrigger>
                     <SheetContent>
-                        <CompanyNavigation company={company} />
+                        <CompanySheetNavigation company={company} />
                     </SheetContent>
                 </Sheet>
             </header>

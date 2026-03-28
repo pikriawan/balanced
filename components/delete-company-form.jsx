@@ -16,8 +16,6 @@ export default function DeleteCompanyForm({ company }) {
 
         if (response.success) {
             setIsShow(false);
-        } else {
-            setError(response.error);
         }
     }
 
