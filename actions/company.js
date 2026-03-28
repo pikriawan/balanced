@@ -69,52 +69,45 @@ export async function createCompany(formData) {
     };
 }
 
-export async function deleteCompany(formData) {
+export async function deleteCompany(companyId) {
     const session = await auth();
 
     if (!session?.user) {
         return;
     }
 
-    const rawFormData = {
-        id: formData.get("id")
-    };
-
-    const error = {
-        id: []
-    };
-
-    const company = await db
+    let result = await db
         .select({ id: companiesTable.id })
         .from(companiesTable)
         .where(
             and(
-                eq(companiesTable.id, rawFormData.id),
+                eq(companiesTable.id, companyId),
                 eq(companiesTable.userId, session.user.id)
             )
         );
-    
-    const exists = company.length !== 0;
 
-    if (!exists) {
-        error.id.push("Perusahaan tidak ditemukan");
-    }
-
-    if (Object.values(error).some((errors) => errors.length)) {
+    if (result.length === 0) {
         return {
             success: false,
-            error
+            error: "Perusahaan tidak ditemukan"
         };
     }
 
-    await db
-        .delete(companiesTable)
-        .where(
-            and(
-                eq(companiesTable.id, rawFormData.id),
-                eq(companiesTable.userId, session.user.id)
-            )
-        );
+    try {
+        await db
+            .delete(companiesTable)
+            .where(
+                and(
+                    eq(companiesTable.id, companyId),
+                    eq(companiesTable.userId, session.user.id)
+                )
+            );
+    } catch (error) {
+        return {
+            success: false,
+            error: "Gagal menghapus perusahaan"
+        };
+    }
 
     refresh();
 
