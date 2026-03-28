@@ -1,5 +1,5 @@
 import { and, eq } from "drizzle-orm";
-import { companiesTable, usersTable } from "@/db/schema";
+import { companiesTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
@@ -10,12 +10,12 @@ export async function getCompanies() {
         return null;
     }
 
-    const companies = await db
+    let result = await db
         .select()
         .from(companiesTable)
         .where(eq(companiesTable.userId, session.user.id));
 
-    return companies;
+    return result;
 }
 
 export async function getCompany(id) {
@@ -25,7 +25,7 @@ export async function getCompany(id) {
         return null;
     }
 
-    const companies = await db
+    let result = await db
         .select()
         .from(companiesTable)
         .where(
@@ -35,9 +35,9 @@ export async function getCompany(id) {
             )
         );
 
-    if (companies.length === 0) {
+    if (result.length === 0) {
         return null;
     }
 
-    return companies[0];
+    return result[0];
 }
