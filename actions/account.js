@@ -2,6 +2,7 @@
 
 import { and, eq } from "drizzle-orm";
 import { refresh } from "next/cache";
+import { z } from "zod";
 import { accountsTable, companiesTable, usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
@@ -10,7 +11,10 @@ export async function createAccount(companyId, formData) {
     const session = await auth();
 
     if (!session?.user) {
-        return;
+        return {
+            success: false,
+            error: "Tidak terautentikasi"
+        };
     }
 
     let result = await db
@@ -23,31 +27,32 @@ export async function createAccount(companyId, formData) {
             )
         );
 
-    if (!result.length) {
+    if (result.length === 0) {
         return {
             success: false,
-            error: {
-                error: ["Perusahaan tidak ditemukan"]
-            }
+            error: "Perusahaan tidak ditemukan"
         };
     }
+
+    const schema = z.object({
+        code: z.string().nonempty("Kode akun tidak boleh kosong"),
+        type: z.enum(["asset", "liability", "equity", "revenue", "expense"], "Tipe akun tidak boleh kosong").nonoptional("Tipe akun tidak boleh kosong"),
+        name: z.string().nonempty("Nama akun tidak boleh kosong")
+    });
 
     const rawFormData = {
         code: formData.get("code"),
         type: formData.get("type"),
-        name: formData.get("name"),
-        isCash: formData.get("isCash")
+        name: formData.get("name")
     };
 
-    const error = {
-        code: [],
-        type: [],
-        name: [],
-        isCash: []
-    };
+    const validatedFields = schema.safeParse(rawFormData);
 
-    if (!rawFormData.code?.length) {
-        error.code.push("Kode akun tidak boleh kosong")
+    if (!validatedFields.success) {
+        return {
+            success: false,
+            error: validatedFields.error.flatten().fieldErrors
+        };
     }
 
     result = await db
@@ -60,22 +65,27 @@ export async function createAccount(companyId, formData) {
             )
         );
 
-    if (result.length) {
-        error.code.push("Kode akun ini sudah dipakai akun lainnya");
-    }
-
-    if (!rawFormData.type?.length) {
-        error.type.push("Tipe akun tidak boleh kosong")
-    }
-
-    if (!rawFormData.name?.length) {
-        error.name.push("Nama akun tidak boleh kosong")
-    }
-
-    if (Object.values(error).some((errors) => errors.length)) {
+    if (result.length > 0) {
         return {
             success: false,
-            error
+            error: "Kode akun sudah digunakan di akun lain"
+        };
+    }
+
+    result = await db
+        .select({ id: accountsTable.id })
+        .from(accountsTable)
+        .where(
+            and(
+                eq(accountsTable.name, rawFormData.name),
+                eq(accountsTable.companyId, companyId)
+            )
+        );
+
+    if (result.length > 0) {
+        return {
+            success: false,
+            error: "Nama akun sudah digunakan di akun lain"
         };
     }
 
@@ -87,15 +97,12 @@ export async function createAccount(companyId, formData) {
                 code: rawFormData.code,
                 type: rawFormData.type,
                 name: rawFormData.name,
-                isCash: rawFormData.isCash
+                isCash: false
             });
     } catch (error) {
-        console.log(formData.get("isCash"));
         return {
             success: false,
-            error: {
-                error: ["Gagal membuat akun baru", error.message]
-            }
+            error: "Gagal membuat akun baru"
         };
     }
 

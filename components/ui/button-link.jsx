@@ -21,7 +21,7 @@ export default function ButtonLink({
     }
 
     return (
-        <Link className={cn("px-4 py-2 flex justify-start items-center gap-3 text-sm no-underline font-medium rounded-lg", variantClassNames, className)} {...props}>
+        <Link className={cn("px-4 py-2 flex justify-start items-center gap-3 text-sm font-medium rounded-lg transition no-underline disabled:bg-neutral-900 disabled:text-neutral-50 disabled:border-0 disabled:opacity-60", variantClassNames, className)} {...props}>
             {children}
         </Link>
     );

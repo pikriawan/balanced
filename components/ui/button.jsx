@@ -20,7 +20,7 @@ export default function Button({
     }
 
     return (
-        <button className={cn("px-4 py-2 flex justify-start items-center gap-3 text-sm font-medium rounded-lg", variantClassNames, className)} {...props}>
+        <button className={cn("px-4 py-2 flex justify-start items-center gap-3 text-sm font-medium rounded-lg transition disabled:bg-neutral-900 disabled:text-neutral-50 disabled:border-0 disabled:opacity-60", variantClassNames, className)} {...props}>
             {children}
         </button>
     );
