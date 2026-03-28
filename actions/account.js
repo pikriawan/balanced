@@ -36,7 +36,7 @@ export async function createAccount(companyId, formData) {
 
     const schema = z.object({
         code: z.string().nonempty("Kode akun tidak boleh kosong"),
-        type: z.enum(["asset", "liability", "equity", "revenue", "expense"], "Tipe akun tidak boleh kosong").nonoptional("Tipe akun tidak boleh kosong"),
+        type: z.enum(["asset", "liability", "equity", "revenue", "expense"], "Tipe akun tidak valid"),
         name: z.string().nonempty("Nama akun tidak boleh kosong")
     });
 

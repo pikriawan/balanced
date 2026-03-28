@@ -8,27 +8,34 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import TextField from "@/components/ui/text-field";
 
 export default function CreateCompanyForm() {
-    const [error, setError] = useState({});
+    const [isPending, setIsPending] = useState(false);
+    const [error, setError] = useState(null);
     const { isShow, setIsShow } = useContext(DialogContext);
-    const textFieldRef = useRef();
+    const autoFocusRef = useRef(null);
 
     async function onSubmit(event) {
         event.preventDefault();
 
         const formData = new FormData(event.target);
+
+        setIsPending(true);
+        setError(null);
+
         const response = await createCompany(formData);
+
+        setIsPending(false);
 
         if (response.success) {
             setIsShow(false);
         } else {
             setError(response.error);
-            textFieldRef.current.focus();
+            autoFocusRef.current.focus();
         }
     }
 
     useEffect(() => {
         if (isShow) {
-            textFieldRef.current.focus();
+            autoFocusRef.current.focus();
         }
     }, [isShow]);
 
@@ -36,8 +43,8 @@ export default function CreateCompanyForm() {
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
             <Field>
                 <FieldLabel htmlFor="createCompany_name">Nama perusahaan</FieldLabel>
-                <TextField ref={textFieldRef} id="createCompany_name" name="name" placeholder="Perusahaan Sukses Besar" />
-                {error.name && (
+                <TextField ref={autoFocusRef} id="createCompany_name" name="name" placeholder="Perusahaan Sukses Besar" />
+                {error?.name?.length > 0 && (
                     <Field>
                         {error.name.map((e) => (
                             <p className="text-red-500 text-sm" key={e}>{e}</p>
@@ -45,11 +52,14 @@ export default function CreateCompanyForm() {
                     </Field>
                 )}
             </Field>
+            {error && typeof error === "string" && (
+                <p className="text-red-500 text-sm" key={error}>{error}</p>
+            )}
             <div className="flex gap-4 items-center">
                 <DialogClose className="w-full">
-                    <Button className="w-full justify-center" variant="outlined" type="button">Batal</Button>
+                    <Button className="w-full justify-center" variant="outlined" type="button" disabled={isPending}>Batal</Button>
                 </DialogClose>
-                <Button className="w-full justify-center">Buat</Button>
+                <Button className="w-full justify-center" disabled={isPending}>Buat</Button>
             </div>
         </form>
     );

@@ -2,7 +2,8 @@
 
 import { and, eq } from "drizzle-orm";
 import { refresh } from "next/cache";
-import { companiesTable, usersTable } from "@/db/schema";
+import { z } from "zod";
+import { companiesTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
@@ -13,31 +14,53 @@ export async function createCompany(formData) {
         return;
     }
 
+    const schema = z.object({
+        name: z.string().nonempty("Nama perusahaan tidak boleh kosong")
+    });
+
     const rawFormData = {
         name: formData.get("name")
     };
 
-    const error = {
-        name: []
-    };
+    const validatedFields = schema.safeParse(rawFormData);
 
-    if (rawFormData.name.length < 5) {
-        error.name.push("Nama perusahaan harus memiliki setidaknya 5 karakter")
-    }
-
-    if (Object.values(error).some((errors) => errors.length)) {
+    if (!validatedFields.success) {
         return {
             success: false,
-            error
+            error: validatedFields.error.flatten().fieldErrors
         };
     }
 
-    await db
-        .insert(companiesTable)
-        .values({
-            userId: session.user.id,
-            name: rawFormData.name
-        });
+    let result = await db
+        .select({ id: companiesTable.id })
+        .from(companiesTable)
+        .where(
+            and(
+                eq(companiesTable.name, rawFormData.name),
+                eq(companiesTable.userId, session.user.id)
+            )
+        );
+
+    if (result.length > 0) {
+        return {
+            success: false,
+            error: "Nama perusahaan sudah digunakan di perusahaan lain"
+        };
+    }
+
+    try {
+        await db
+            .insert(companiesTable)
+            .values({
+                userId: session.user.id,
+                name: rawFormData.name
+            });
+    } catch (error) {
+        return {
+            success: false,
+            error: "Gagal membuat perusahaan baru"
+        };
+    }
 
     refresh();
 
