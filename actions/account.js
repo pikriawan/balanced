@@ -35,13 +35,15 @@ export async function createAccount(companyId, formData) {
     const rawFormData = {
         code: formData.get("code"),
         type: formData.get("type"),
-        name: formData.get("name")
+        name: formData.get("name"),
+        isCash: formData.get("isCash")
     };
 
     const error = {
         code: [],
         type: [],
-        name: []
+        name: [],
+        isCash: []
     };
 
     if (!rawFormData.code?.length) {
@@ -57,8 +59,6 @@ export async function createAccount(companyId, formData) {
                 eq(accountsTable.companyId, companyId)
             )
         );
-
-    console.log(result);
 
     if (result.length) {
         error.code.push("Kode akun ini sudah dipakai akun lainnya");
@@ -87,9 +87,10 @@ export async function createAccount(companyId, formData) {
                 code: rawFormData.code,
                 type: rawFormData.type,
                 name: rawFormData.name,
-                isCash: false
+                isCash: rawFormData.isCash
             });
     } catch (error) {
+        console.log(formData.get("isCash"));
         return {
             success: false,
             error: {
