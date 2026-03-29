@@ -39,10 +39,7 @@ export async function createAccount(companyId, formData) {
         type: z.enum(["asset", "liability", "equity", "revenue", "expense"], "Tipe akun tidak valid"),
         name: z.string().nonempty("Nama akun tidak boleh kosong"),
         isCash: z.stringbool(),
-        cashflowCategory: z.preprocess(
-            (val) => (val === "" ? null : val),
-            z.enum(["operating", "investing", "financing"], "Kategori arus kas akun tidak valid").nullable()
-        )
+        cashflowCategory: z.enum(["operating", "investing", "financing"], "Kategori arus kas akun tidak valid")
     });
 
     const rawFormData = Object.fromEntries(formData);
