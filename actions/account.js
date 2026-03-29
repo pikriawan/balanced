@@ -92,7 +92,10 @@ export async function createAccount(companyId, formData) {
     try {
         await db
             .insert(accountsTable)
-            .values({ companyId, ...validatedFields.data });
+            .values({
+                companyId,
+                ...validatedFields.data
+            });
     } catch (error) {
         return {
             success: false,

@@ -53,7 +53,7 @@ export async function createCompany(formData) {
             .insert(companiesTable)
             .values({
                 userId: session.user.id,
-                name: rawFormData.name
+                ...validatedFields.data
             });
     } catch (error) {
         return {
