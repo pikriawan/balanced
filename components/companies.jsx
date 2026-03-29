@@ -1,6 +1,7 @@
 import { SquarePen, Trash2 } from "lucide-react";
 import Link from "next/link";
 import CompanyDeleteForm from "@/components/company-delete-form";
+import CompanyUpdateForm from "@/components/company-update-form";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { getCompanies } from "@/data/company";
 
@@ -23,7 +24,7 @@ export default async function Companies() {
                             </DialogTrigger>
                         </div>
                         <DialogContent>
-                            <h2>Content goes here</h2>
+                            <CompanyUpdateForm company={company} />
                         </DialogContent>
                     </Dialog>
                     <Dialog>

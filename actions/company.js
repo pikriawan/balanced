@@ -1,6 +1,6 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { refresh } from "next/cache";
 import { z } from "zod";
 import { companiesTable } from "@/db/schema";
@@ -59,6 +59,89 @@ export async function createCompany(formData) {
         return {
             success: false,
             error: "Gagal membuat perusahaan baru"
+        };
+    }
+
+    refresh();
+
+    return {
+        success: true
+    };
+}
+
+export async function updateCompany(companyId, formData) {
+    const session = await auth();
+
+    if (!session?.user) {
+        return;
+    }
+
+    const schema = z.object({
+        name: z.string().nonempty("Nama perusahaan tidak boleh kosong")
+    });
+
+    const rawFormData = {
+        name: formData.get("name")
+    };
+
+    const validatedFields = schema.safeParse(rawFormData);
+
+    if (!validatedFields.success) {
+        return {
+            success: false,
+            error: z.flattenError(validatedFields.error).fieldErrors
+        };
+    }
+
+    let result = await db
+        .select({ id: companiesTable.id })
+        .from(companiesTable)
+        .where(
+            and(
+                eq(companiesTable.id, companyId),
+                eq(companiesTable.userId, session.user.id)
+            )
+        );
+
+    if (result.length === 0) {
+        return {
+            success: false,
+            error: "Perusahaan tidak ditemukan"
+        };
+    }
+
+    result = await db
+        .select({ id: companiesTable.id })
+        .from(companiesTable)
+        .where(
+            and(
+                ne(companiesTable.id, companyId),
+                eq(companiesTable.name, rawFormData.name),
+                eq(companiesTable.userId, session.user.id)
+            )
+        );
+
+    if (result.length > 0) {
+        return {
+            success: false,
+            error: "Nama perusahaan sudah digunakan di perusahaan lain"
+        };
+    }
+
+    try {
+        await db
+            .update(companiesTable)
+            .set(validatedFields.data)
+            .where(
+                and(
+                    eq(companiesTable.id, companyId),
+                    eq(companiesTable.userId, session.user.id)
+                )
+            );
+    } catch (error) {
+        return {
+            success: false,
+            error: "Gagal memperbarui perusahaan"
         };
     }
 
