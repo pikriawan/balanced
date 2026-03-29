@@ -6,6 +6,7 @@ import Button from "@/components/ui/button";
 import { DialogClose, DialogContext } from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
 import Select from "@/components/ui/select";
+import Switch from "@/components/ui/switch";
 import TextField from "@/components/ui/text-field";
 
 export default function CreateCompanyForm({ companyId }) {
@@ -25,6 +26,12 @@ export default function CreateCompanyForm({ companyId }) {
         const response = await createAccount(companyId, formData);
 
         setIsPending(false);
+
+        console.log("Submitted");
+        console.log(formData);
+
+        console.log("Response");
+        console.log(response);
 
         if (response.success) {
             setIsShow(false);
@@ -76,6 +83,33 @@ export default function CreateCompanyForm({ companyId }) {
                 {error?.name?.length > 0 && (
                     <Field>
                         {error.name.map((e) => (
+                            <p className="text-red-500 text-sm" key={e}>{e}</p>
+                        ))}
+                    </Field>
+                )}
+            </Field>
+            <Field>
+                <FieldLabel htmlFor="createAccount_isCash">Termasuk akun kas atau setara kas?</FieldLabel>
+                <Switch id="createAccount_isCash" name="isCash" />
+                {error?.isCash?.length > 0 && (
+                    <Field>
+                        {error.isCash.map((e) => (
+                            <p className="text-red-500 text-sm" key={e}>{e}</p>
+                        ))}
+                    </Field>
+                )}
+            </Field>
+            <Field>
+                <FieldLabel htmlFor="createAccount_cashflowCategory">Kategori arus kas</FieldLabel>
+                <Select id="createAccount_cashflowCategory" name="cashflowCategory">
+                    <option value="">Pilih kategori arus kas</option>
+                    <option value="operating">Operasional</option>
+                    <option value="investing">Investasi</option>
+                    <option value="financing">Pendanaan</option>
+                </Select>
+                {error?.cashflowCategory?.length > 0 && (
+                    <Field>
+                        {error.cashflowCategory.map((e) => (
                             <p className="text-red-500 text-sm" key={e}>{e}</p>
                         ))}
                     </Field>

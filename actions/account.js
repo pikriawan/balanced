@@ -3,7 +3,7 @@
 import { and, eq } from "drizzle-orm";
 import { refresh } from "next/cache";
 import { z } from "zod";
-import { accountsTable, companiesTable, usersTable } from "@/db/schema";
+import { accountsTable, companiesTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
@@ -37,15 +37,15 @@ export async function createAccount(companyId, formData) {
     const schema = z.object({
         code: z.string().nonempty("Kode akun tidak boleh kosong"),
         type: z.enum(["asset", "liability", "equity", "revenue", "expense"], "Tipe akun tidak valid"),
-        name: z.string().nonempty("Nama akun tidak boleh kosong")
+        name: z.string().nonempty("Nama akun tidak boleh kosong"),
+        isCash: z.stringbool(),
+        cashflowCategory: z.preprocess(
+            (val) => (val === "" ? null : val),
+            z.enum(["operating", "investing", "financing"], "Kategori arus kas akun tidak valid").nullable()
+        )
     });
 
-    const rawFormData = {
-        code: formData.get("code"),
-        type: formData.get("type"),
-        name: formData.get("name")
-    };
-
+    const rawFormData = Object.fromEntries(formData);
     const validatedFields = schema.safeParse(rawFormData);
 
     if (!validatedFields.success) {
@@ -92,13 +92,7 @@ export async function createAccount(companyId, formData) {
     try {
         await db
             .insert(accountsTable)
-            .values({
-                companyId,
-                code: rawFormData.code,
-                type: rawFormData.type,
-                name: rawFormData.name,
-                isCash: false
-            });
+            .values({ companyId, ...validatedFields.data });
     } catch (error) {
         return {
             success: false,
