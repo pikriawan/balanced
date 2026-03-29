@@ -5,7 +5,7 @@ import { deleteCompany } from "@/actions/company";
 import Button from "@/components/ui/button";
 import { DialogClose, DialogContext } from "@/components/ui/dialog";
 
-export default function DeleteCompanyForm({ company }) {
+export default function CompanyDeleteForm({ company }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
     const { setIsShow } = useContext(DialogContext);
@@ -30,6 +30,9 @@ export default function DeleteCompanyForm({ company }) {
     return (
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
             <p>Anda yakin ingin menghapus perusahaan "{company.name}"?</p>
+            {error && typeof error === "string" && (
+                <p className="text-red-500 text-sm" key={error}>{error}</p>
+            )}
             <div className="flex gap-4 items-center">
                 <DialogClose className="w-full">
                     <Button className="w-full justify-center" variant="outlined" type="button" disabled={isPending}>Batal</Button>

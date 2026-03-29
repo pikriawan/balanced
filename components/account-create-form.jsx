@@ -9,7 +9,7 @@ import Select from "@/components/ui/select";
 import Switch from "@/components/ui/switch";
 import TextField from "@/components/ui/text-field";
 
-export default function CreateCompanyForm({ companyId }) {
+export default function AccountCreateForm({ companyId }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
     const { isShow, setIsShow } = useContext(DialogContext);
@@ -26,12 +26,6 @@ export default function CreateCompanyForm({ companyId }) {
         const response = await createAccount(companyId, formData);
 
         setIsPending(false);
-
-        console.log("Submitted");
-        console.log(formData);
-
-        console.log("Response");
-        console.log(response);
 
         if (response.success) {
             setIsShow(false);

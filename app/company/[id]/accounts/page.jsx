@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react";
-import CreateAccountForm from "@/components/create-account-form";
+import AccountCreateForm from "@/components/account-create-form";
 import Button from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { getCompany } from "@/data/company";
@@ -19,7 +19,7 @@ export default async function CompanyAccountsPage({ params }) {
                     </Button>
                 </DialogTrigger>
                 <DialogContent>
-                    <CreateAccountForm companyId={company.id} />
+                    <AccountCreateForm companyId={company.id} />
                 </DialogContent>
             </Dialog>
         </div>

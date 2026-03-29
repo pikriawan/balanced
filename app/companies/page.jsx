@@ -1,7 +1,6 @@
 import { Plus } from "lucide-react";
-import { createCompany } from "@/actions/company";
+import CompanyCreateForm from "@/components/company-create-form";
 import Companies from "@/components/companies";
-import CreateCompanyForm from "@/components/create-company-form";
 import Button from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
@@ -17,7 +16,7 @@ export default function CompainesPage() {
                     </Button>
                 </DialogTrigger>
                 <DialogContent>
-                    <CreateCompanyForm />
+                    <CompanyCreateForm />
                 </DialogContent>
             </Dialog>
             <Companies />

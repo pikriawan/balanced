@@ -7,7 +7,7 @@ import { DialogClose, DialogContext } from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
 import TextField from "@/components/ui/text-field";
 
-export default function CreateCompanyForm() {
+export default function CompanyCreateForm() {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
     const { isShow, setIsShow } = useContext(DialogContext);
