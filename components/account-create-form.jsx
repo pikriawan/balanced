@@ -12,9 +12,7 @@ import TextField from "@/components/ui/text-field";
 export default function AccountCreateForm({ companyId }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
-    const [type, setType] = useState(null);
-    const [isCash, setIsCash] = useState(false);
-    const [defaultCashflowCategory, setDefaultCashflowCategory] = useState("");
+    const [isAsset, setIsAsset] = useState(false);
     const { isShow, setIsShow } = useContext(DialogContext);
     const autoFocusRef = useRef(null);
 
@@ -43,33 +41,11 @@ export default function AccountCreateForm({ companyId }) {
         }
     }, [isShow]);
 
-    useEffect(() => {
-        switch (type) {
-            case "asset":
-                setDefaultCashflowCategory("investing");
-                break;
-            case "liability":
-                setDefaultCashflowCategory("financing");
-                break;
-            case "equity":
-                setDefaultCashflowCategory("financing");
-                break;
-            case "revenue":
-                setDefaultCashflowCategory("operating");
-                break;
-            case "expense":
-                setDefaultCashflowCategory("operating");
-                break;
-            default:
-                setDefaultCashflowCategory("");
-        }
-    }, [type]);
-
     return (
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
             <Field>
                 <FieldLabel htmlFor="createAccount_code">Kode akun</FieldLabel>
-                <TextField id="createAccount_code" name="code" placeholder="1-1000" ref={autoFocusRef} />
+                <TextField id="createAccount_code" name="code" placeholder="1001" ref={autoFocusRef} />
                 {error?.code?.length > 0 && (
                     <Field>
                         {error.code.map((e) => (
@@ -80,7 +56,7 @@ export default function AccountCreateForm({ companyId }) {
             </Field>
             <Field>
                 <FieldLabel htmlFor="createAccount_type">Tipe akun</FieldLabel>
-                <Select id="createAccount_type" name="type" onChange={(event) => setType(event.target.value)}>
+                <Select id="createAccount_type" name="type" onChange={(event) => setIsAsset(event.target.value === "asset")}>
                     <option value="">Pilih tipe akun</option>
                     <option value="asset">Aset</option>
                     <option value="liability">Kewajiban</option>
@@ -107,34 +83,13 @@ export default function AccountCreateForm({ companyId }) {
                     </Field>
                 )}
             </Field>
-            <Field>
-                <FieldLabel htmlFor="createAccount_isCash">Termasuk akun kas atau setara kas?</FieldLabel>
-                <Switch id="createAccount_isCash" name="isCash" isEnabled={isCash} onChange={setIsCash} />
-                {error?.isCash?.length > 0 && (
-                    <Field>
-                        {error.isCash.map((e) => (
-                            <p className="text-red-500 text-sm" key={e}>{e}</p>
-                        ))}
-                    </Field>
-                )}
-            </Field>
-            {!isCash && (
+            {isAsset && (
                 <Field>
-                    <FieldLabel htmlFor="createAccount_cashflowCategory">Kategori arus kas</FieldLabel>
-                    <Select
-                        id="createAccount_cashflowCategory"
-                        name="cashflowCategory"
-                        value={defaultCashflowCategory}
-                        onChange={(event) => setDefaultCashflowCategory(event.target.value)}
-                    >
-                        <option value="">Pilih kategori arus kas</option>
-                        <option value="operating">Operasional</option>
-                        <option value="investing">Investasi</option>
-                        <option value="financing">Pendanaan</option>
-                    </Select>
-                    {error?.cashflowCategory?.length > 0 && (
+                    <FieldLabel htmlFor="createAccount_isCash">Termasuk akun kas atau setara kas?</FieldLabel>
+                    <Switch id="createAccount_isCash" name="isCash" />
+                    {error?.isCash?.length > 0 && (
                         <Field>
-                            {error.cashflowCategory.map((e) => (
+                            {error.isCash.map((e) => (
                                 <p className="text-red-500 text-sm" key={e}>{e}</p>
                             ))}
                         </Field>

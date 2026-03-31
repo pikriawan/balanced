@@ -11,7 +11,7 @@ export default async function Companies() {
     return companies.length ? (
         <div className="w-full max-w-md flex flex-col">
             {companies.map((company) => (
-                <div className="flex bg-neutral-950 border-x border-b border-neutral-800 first:border-t first:rounded-t-2xl last:rounded-b-2xl" key={company.id}>
+                <div className="flex bg-neutral-950 border-x border-b border-neutral-800 first:border-t first:rounded-t-lg last:rounded-b-lg" key={company.id}>
                     <Link title={company.name} className="w-full flex px-4 py-2 overflow-hidden" href={`/company/${company.id}/accounts`}>
                         <p className="truncate">
                             {company.name}
@@ -41,6 +41,6 @@ export default async function Companies() {
             ))}
         </div>
     ) : (
-        <p>Kamu belum bikin perusahaan apapun. Ayo buat sekarang!</p>
+        <p>Kamu belum punya perusahaan apapun. Ayo buat sekarang!</p>
     );
 }

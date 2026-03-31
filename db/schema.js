@@ -24,8 +24,8 @@ export const accountsTable = pgTable("accounts", {
     code: t.varchar().notNull(),
     type: accountTypesEnum().notNull(),
     name: t.varchar().notNull(),
-    isCash: t.boolean("is_cash").notNull(),
-    cashflowCategory: cashflowCategoriesEnum().notNull()
+    isCash: t.boolean("is_cash").notNull().default(false),
+    cashflowCategory: cashflowCategoriesEnum()
 });
 
 export const journalEntriesTable = pgTable("journal_entries", {

@@ -38,8 +38,7 @@ export async function createAccount(companyId, formData) {
         code: z.string().nonempty("Kode akun tidak boleh kosong"),
         type: z.enum(["asset", "liability", "equity", "revenue", "expense"], "Tipe akun tidak valid"),
         name: z.string().nonempty("Nama akun tidak boleh kosong"),
-        isCash: z.stringbool(),
-        cashflowCategory: z.enum(["operating", "investing", "financing"], "Kategori arus kas akun tidak valid").default("operating")
+        isCash: z.stringbool().optional()
     });
 
     const rawFormData = Object.fromEntries(formData);
@@ -86,12 +85,26 @@ export async function createAccount(companyId, formData) {
         };
     }
 
+    let cashflowCategory = null;
+
+    if (!validatedFields.data.isCash) {
+        if (validatedFields.data.type === "asset") {
+            cashflowCategory = "investing";
+        } else if (validatedFields.data.type === "liability" || validatedFields.data.type === "equity") {
+            cashflowCategory = "financing";
+        } else {
+            cashflowCategory = "operating";
+        }
+    }
+
+
     try {
         await db
             .insert(accountsTable)
             .values({
                 companyId,
-                ...validatedFields.data
+                ...validatedFields.data,
+                cashflowCategory
             });
     } catch (error) {
         return {
