@@ -9,12 +9,13 @@ import {
 
 export default function Accounts({ companyId, accounts }) {
     return (
-        <Table>
+        <Table className="w-full">
             <TableHeader>
                 <TableRow>
                     <TableHead>Kode akun</TableHead>
                     <TableHead>Nama akun</TableHead>
                     <TableHead>Tipe akun</TableHead>
+                    <TableHead>Aksi</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -29,6 +30,7 @@ export default function Accounts({ companyId, accounts }) {
                         <TableCell>
                             {account.type}
                         </TableCell>
+                        <TableCell />
                     </TableRow>
                 ))}
             </TableBody>
