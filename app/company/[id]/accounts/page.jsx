@@ -1,12 +1,15 @@
 import { Plus } from "lucide-react";
 import AccountCreateForm from "@/components/account-create-form";
+import Accounts from "@/components/accounts";
 import Button from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { getAccounts } from "@/data/accounts";
 import { getCompany } from "@/data/company";
 
 export default async function CompanyAccountsPage({ params }) {
     const { id } = await params;
     const company = await getCompany(id);
+    const accounts = await getAccounts(company.id);
 
     return (
         <div className="p-4 flex flex-col items-start gap-4">
@@ -22,6 +25,7 @@ export default async function CompanyAccountsPage({ params }) {
                     <AccountCreateForm companyId={company.id} />
                 </DialogContent>
             </Dialog>
+            <Accounts companyId={company.id} accounts={accounts} />
         </div>
     );
 }
