@@ -1,0 +1,43 @@
+"use client";
+
+import { useContext, useState } from "react";
+import Button from "@/components/ui/button";
+import { DialogClose, DialogContext } from "@/components/ui/dialog";
+
+export default function AccountDeleteForm({ companyId, account }) {
+    const [isPending, setIsPending] = useState(false);
+    const [error, setError] = useState(null);
+    const { setIsShow } = useContext(DialogContext);
+
+    async function onSubmit(event) {
+        event.preventDefault();
+
+        setIsPending(true);
+        setError(null);
+
+        const response = await Promise.resolve({ success: true });
+
+        setIsPending(false);
+
+        if (response.success) {
+            setIsShow(false);
+        } else {
+            setError(response.error);
+        }
+    }
+
+    return (
+        <form onSubmit={onSubmit} className="flex flex-col gap-4">
+            <p>Anda yakin ingin menghapus akun "{account.name}"?</p>
+            {error && typeof error === "string" && (
+                <p className="text-red-500 text-sm" key={error}>{error}</p>
+            )}
+            <div className="flex gap-4 items-center">
+                <DialogClose className="w-full">
+                    <Button className="w-full justify-center" variant="outlined" type="button" disabled={isPending}>Batal</Button>
+                </DialogClose>
+                <Button variant="danger" className="w-full justify-center" disabled={isPending}>Ya, hapus</Button>
+            </div>
+        </form>
+    );
+}

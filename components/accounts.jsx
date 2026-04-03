@@ -1,4 +1,8 @@
+import { SquarePen, Trash2 } from "lucide-react";
 import { Fragment } from "react";
+import AccountDeleteForm from "@/components/account-delete-form";
+import AccountUpdateForm from "@/components/account-update-form";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableCell, TableHead } from "@/components/ui/table";
 
 export default async function Accounts({ companyId, accounts }) {
@@ -24,7 +28,28 @@ export default async function Accounts({ companyId, accounts }) {
                         <TableCell>
                             {account.balance}
                         </TableCell>
-                        <TableCell />
+                        <TableCell className="flex gap-4">
+                            <Dialog>
+                                <div className="flex items-center pr-4 py-2">
+                                    <DialogTrigger>
+                                        <SquarePen size={16} color="oklch(98.5% 0 0)" />
+                                    </DialogTrigger>
+                                </div>
+                                <DialogContent>
+                                    <AccountUpdateForm companyId={companyId} account={account} />
+                                </DialogContent>
+                            </Dialog>
+                            <Dialog>
+                                <div className="flex items-center pr-4 py-2">
+                                    <DialogTrigger>
+                                        <Trash2 size={16} color="oklch(63.7% 0.237 25.331)" />
+                                    </DialogTrigger>
+                                </div>
+                                <DialogContent>
+                                    <AccountDeleteForm companyId={companyId} account={account} />
+                                </DialogContent>
+                            </Dialog>
+                        </TableCell>
                     </Fragment>
                 ))}
             </Table>
