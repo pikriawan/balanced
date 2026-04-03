@@ -1,15 +1,16 @@
 import { Fragment } from "react";
 import { Table, TableCell, TableHead } from "@/components/ui/table";
 
-export default function Accounts({ companyId, accounts }) {
+export default async function Accounts({ companyId, accounts }) {
     return (
         <div className="w-full">
-            <Table className="w-full overflow-auto grid-cols-[repeat(4,minmax(16rem,1fr))]">
+            <Table className="w-full overflow-auto grid-cols-[repeat(5,minmax(16rem,1fr))]">
                 <TableHead>Kode akun</TableHead>
                 <TableHead>Nama akun</TableHead>
                 <TableHead>Tipe akun</TableHead>
+                <TableHead>Saldo</TableHead>
                 <TableHead>Aksi</TableHead>
-                {accounts.length > 0 && accounts.map((account) => (
+                {accounts.length > 0 && accounts.map((account, i) => (
                     <Fragment key={account.id}>
                         <TableCell>
                             {account.code}
@@ -19,6 +20,9 @@ export default function Accounts({ companyId, accounts }) {
                         </TableCell>
                         <TableCell>
                             {account.type}
+                        </TableCell>
+                        <TableCell>
+                            {account.balance}
                         </TableCell>
                         <TableCell />
                     </Fragment>
