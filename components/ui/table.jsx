@@ -2,48 +2,24 @@ import { cn } from "@/lib/utils";
 
 export function Table({ className, children, ...props }) {
     return (
-        <table className={cn("border-separate border-spacing-0 border border-neutral-800 rounded-lg", className)} {...props}>
+        <div className={cn("grid gap-y-px bg-neutral-800 border border-neutral-800 rounded-lg", className)} {...props}>
             {children}
-        </table>
-    );
-}
-
-export function TableHeader({ className, children, ...props }) {
-    return (
-        <thead className={cn("", className)} {...props}>
-            {children}
-        </thead>
-    );
-}
-
-export function TableRow({ className, children, ...props }) {
-    return (
-        <tr className={cn("", className)} {...props}>
-            {children}
-        </tr>
+        </div>
     );
 }
 
 export function TableHead({ className, children, ...props }) {
     return (
-        <th className={cn("min-w-48 text-left px-4 py-2 font-medium bg-neutral-900 first:rounded-tl-md last:rounded-tr-md", className)} {...props}>
+        <div className={cn("px-4 py-2 bg-neutral-900", className)} {...props}>
             {children}
-        </th>
-    );
-}
-
-export function TableBody({ className, children, ...props }) {
-    return (
-        <tbody className={cn("", className)} {...props}>
-            {children}
-        </tbody>
+        </div>
     );
 }
 
 export function TableCell({ className, children, ...props }) {
     return (
-        <td className={cn("min-w-48 px-4 py-2 first:rounded-bl-md last:rounded-br-md ", className)} {...props}>
+        <div className={cn("px-4 py-2 bg-neutral-950", className)} {...props}>
             {children}
-        </td>
+        </div>
     );
 }
