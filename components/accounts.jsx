@@ -51,7 +51,7 @@ export default async function Accounts({ companyId, accounts }) {
                                     </DialogTrigger>
                                 </div>
                                 <DialogContent>
-                                    <AccountUpdateForm companyId={companyId} account={account} />
+                                    <AccountUpdateForm account={account} />
                                 </DialogContent>
                             </Dialog>
                             <Dialog>
@@ -61,7 +61,7 @@ export default async function Accounts({ companyId, accounts }) {
                                     </DialogTrigger>
                                 </div>
                                 <DialogContent>
-                                    <AccountDeleteForm companyId={companyId} account={account} />
+                                    <AccountDeleteForm account={account} />
                                 </DialogContent>
                             </Dialog>
                         </TableCell>

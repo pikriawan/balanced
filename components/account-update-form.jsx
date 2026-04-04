@@ -9,7 +9,7 @@ import Select from "@/components/ui/select";
 import Switch from "@/components/ui/switch";
 import TextField from "@/components/ui/text-field";
 
-export default function AccountUpdateForm({ companyId, account }) {
+export default function AccountUpdateForm({ account }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
     const [isAsset, setIsAsset] = useState(account.type === "asset");
@@ -24,7 +24,7 @@ export default function AccountUpdateForm({ companyId, account }) {
         setIsPending(true);
         setError(null);
 
-        const response = await updateAccount(companyId, account.id, formData);
+        const response = await updateAccount(account.id, formData);
 
         setIsPending(false);
 

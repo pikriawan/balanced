@@ -167,7 +167,7 @@ export async function updateAccount(accountId, formData) {
         .where(
             and(
                 eq(companiesTable.id, companyId),
-                eq(companiesTable.accountId, session.user.id)
+                eq(companiesTable.userId, session.user.id)
             )
         );
 
