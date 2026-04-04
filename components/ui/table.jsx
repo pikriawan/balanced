@@ -10,7 +10,7 @@ export function Table({ className, children, ...props }) {
 
 export function TableHead({ className, children, ...props }) {
     return (
-        <div className={cn("px-4 py-2 bg-neutral-900", className)} {...props}>
+        <div className={cn("px-4 py-2 flex items-center gap-4 bg-neutral-900", className)} {...props}>
             {children}
         </div>
     );
@@ -18,7 +18,7 @@ export function TableHead({ className, children, ...props }) {
 
 export function TableCell({ className, children, ...props }) {
     return (
-        <div className={cn("px-4 py-2 bg-neutral-950", className)} {...props}>
+        <div className={cn("px-4 py-2 flex items-center gap-4 bg-neutral-950", className)} {...props}>
             {children}
         </div>
     );

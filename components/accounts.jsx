@@ -28,7 +28,7 @@ export default async function Accounts({ companyId, accounts }) {
                         <TableCell>
                             {account.balance}
                         </TableCell>
-                        <TableCell className="flex gap-4">
+                        <TableCell>
                             <Dialog>
                                 <div className="flex items-center pr-4 py-2">
                                     <DialogTrigger>
