@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useRef, useState } from "react";
+import { updateAccount } from "@/actions/account";
 import Button from "@/components/ui/button";
 import { DialogClose, DialogContext } from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -23,8 +24,7 @@ export default function AccountUpdateForm({ companyId, account }) {
         setIsPending(true);
         setError(null);
 
-        // const response = await updateAccount(companyId, account.id, formData);
-        const response = await Promise.resolve({ success: true });
+        const response = await updateAccount(companyId, account.id, formData);
 
         setIsPending(false);
 
@@ -104,7 +104,7 @@ export default function AccountUpdateForm({ companyId, account }) {
                 <DialogClose className="w-full">
                     <Button className="w-full justify-center" variant="outlined" type="button" disabled={isPending}>Batal</Button>
                 </DialogClose>
-                <Button className="w-full justify-center" disabled={isPending}>Buat</Button>
+                <Button className="w-full justify-center" disabled={isPending}>Simpan perubahan</Button>
             </div>
         </form>
     );

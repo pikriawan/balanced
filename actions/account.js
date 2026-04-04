@@ -1,9 +1,9 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { refresh } from "next/cache";
 import { z } from "zod";
-import { accountsTable, companiesTable } from "@/db/schema";
+import { accountsTable, companiesTable, journalEntryDetailsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
@@ -110,6 +110,101 @@ export async function createAccount(companyId, formData) {
         return {
             success: false,
             error: "Gagal membuat akun baru"
+        };
+    }
+
+    refresh();
+
+    return {
+        success: true
+    };
+}
+
+export async function updateAccount(accountId, formData) {
+    const session = await auth();
+
+    if (!session?.user) {
+        return {
+            success: false,
+            error: "Tidak terautentikasi"
+        };
+    }
+
+    const schema = z.object({
+        code: z.string().nonempty("Kode akun tidak boleh kosong"),
+        type: z.enum(["asset", "liability", "equity", "revenue", "expense"], "Tipe akun tidak valid"),
+        name: z.string().nonempty("Nama akun tidak boleh kosong"),
+        isCash: z.stringbool().optional()
+    });
+
+    const rawFormData = Object.fromEntries(formData);
+    const validatedFields = schema.safeParse(rawFormData);
+
+    if (!validatedFields.success) {
+        return {
+            success: false,
+            error: z.flattenError(validatedFields.error).fieldErrors
+        };
+    }
+
+    let result = await db
+        .select({ companyId: accountsTable.companyId })
+        .from(accountsTable)
+        .where(eq(accountsTable.id, accountId));
+
+    if (result.length === 0) {
+        return {
+            success: false,
+            error: "Akun tidak ditemukan"
+        };
+    }
+
+    const { companyId } = result[0];
+
+    result = await db
+        .select({ id: companiesTable.id })
+        .from(companiesTable)
+        .where(
+            and(
+                eq(companiesTable.id, companyId),
+                eq(companiesTable.accountId, session.user.id)
+            )
+        );
+
+    if (result.length === 0) {
+        return {
+            success: false,
+            error: "Anda tidak memiliki akses untuk mengubah akun ini"
+        };
+    }
+
+    result = await db
+        .select({ name: accountsTable.name })
+        .from(accountsTable)
+        .where(
+            and(
+                eq(accountsTable.name, validatedFields.data.name),
+                eq(accountsTable.companyId, companyId),
+                ne(accountsTable.id, accountId)
+            )
+        );
+
+    if (result.length > 0) {
+        return {
+            success: false,
+            error: "Nama akun sudah digunakan di akun lain"
+        };
+    }
+
+    try {
+        await db
+            .update(accountsTable)
+            .set(validatedFields.data)
+            .where(eq(accountsTable.id, accountId));
+    } catch (error) {
+        return {
+            success: false,
+            error: "Gagal memperbarui akun"
         };
     }
 

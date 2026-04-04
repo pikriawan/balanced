@@ -5,6 +5,21 @@ import AccountUpdateForm from "@/components/account-update-form";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableCell, TableHead } from "@/components/ui/table";
 
+function getAccountTypeText(accountType) {
+    switch (accountType) {
+        case "asset":
+            return "Aset";
+        case "liability":
+            return "Utang";
+        case "equity":
+            return "Modal";
+        case "revenue":
+            return "Pendapatan";
+        case "expense":
+            return "Beban";
+    }
+}
+
 export default async function Accounts({ companyId, accounts }) {
     return (
         <div className="w-full">
@@ -23,7 +38,7 @@ export default async function Accounts({ companyId, accounts }) {
                             {account.name}
                         </TableCell>
                         <TableCell>
-                            {account.type}
+                            {getAccountTypeText(account.type)}
                         </TableCell>
                         <TableCell>
                             {account.balance}
