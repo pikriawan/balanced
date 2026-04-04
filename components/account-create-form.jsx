@@ -59,7 +59,7 @@ export default function AccountCreateForm({ companyId }) {
                 <Select id="createAccount_type" name="type" onChange={(event) => setIsAsset(event.target.value === "asset")}>
                     <option value="">Pilih tipe akun</option>
                     <option value="asset">Aset</option>
-                    <option value="liability">Kewajiban</option>
+                    <option value="liability">Utang</option>
                     <option value="equity">Modal</option>
                     <option value="revenue">Pendapatan</option>
                     <option value="expense">Beban</option>

@@ -60,7 +60,7 @@ export default function AccountUpdateForm({ companyId, account }) {
                 <Select id={`updateAccount_type_${account.id}`} name="type" onChange={(event) => setIsAsset(event.target.value === "asset")} defaultValue={account.type}>
                     <option value="">Pilih tipe akun</option>
                     <option value="asset">Aset</option>
-                    <option value="liability">Kewajiban</option>
+                    <option value="liability">Utang</option>
                     <option value="equity">Modal</option>
                     <option value="revenue">Pendapatan</option>
                     <option value="expense">Beban</option>
