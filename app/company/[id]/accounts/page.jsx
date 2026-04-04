@@ -3,7 +3,7 @@ import AccountCreateForm from "@/components/account-create-form";
 import Accounts from "@/components/accounts";
 import Button from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { getAccountBalance, getAccounts } from "@/data/accounts";
+import { getAccountBalance, getAccounts } from "@/data/account";
 import { getCompany } from "@/data/company";
 
 export default async function CompanyAccountsPage({ params }) {
@@ -30,7 +30,7 @@ export default async function CompanyAccountsPage({ params }) {
                     <AccountCreateForm companyId={company.id} />
                 </DialogContent>
             </Dialog>
-            <Accounts companyId={company.id} accounts={accounts} />
+            <Accounts accounts={accounts} />
         </div>
     );
 }

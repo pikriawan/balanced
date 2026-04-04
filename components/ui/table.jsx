@@ -1,25 +1,53 @@
 import { cn } from "@/lib/utils";
 
-export function Table({ className, children, ...props }) {
+export function Table({ children, ...props }) {
     return (
-        <div className={cn("grid gap-y-px bg-neutral-800 border border-neutral-800 rounded-lg", className)} {...props}>
+        <table {...props}>
             {children}
-        </div>
+        </table>
+    );
+}
+
+export function TableHeader({ className, children, ...props }) {
+    return (
+        <thead className={cn("bg-neutral-900 border-b border-neutral-800", className)} {...props}>
+            {children}
+        </thead>
+    );
+}
+
+export function TableBody({ children, ...props }) {
+    return (
+        <tbody {...props}>
+            {children}
+        </tbody>
+    );
+}
+
+export function TableRow({ children, ...props }) {
+    return (
+        <tr {...props}>
+            {children}
+        </tr>
     );
 }
 
 export function TableHead({ className, children, ...props }) {
     return (
-        <div className={cn("px-4 py-2 flex items-center gap-4 bg-neutral-900", className)} {...props}>
-            {children}
-        </div>
+        <th className={cn("px-4 py-2 font-medium bg-neutral-900 border-b border-neutral-800", className)} {...props}>
+            <div className="flex items-center gap-4 whitespace-nowrap">
+                {children}
+            </div>
+        </th>
     );
 }
 
 export function TableCell({ className, children, ...props }) {
     return (
-        <div className={cn("px-4 py-2 flex items-center gap-4 bg-neutral-950", className)} {...props}>
-            {children}
-        </div>
+        <td className={cn("px-4 py-2 bg-neutral-950 border-b border-neutral-800", className)} {...props}>
+            <div className="flex items-center gap-4 whitespace-nowrap">
+                {children}
+            </div>
+        </td>
     );
 }

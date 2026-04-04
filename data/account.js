@@ -13,7 +13,8 @@ export async function getAccounts(companyId) {
     let result = await db
         .select()
         .from(accountsTable)
-        .where(eq(accountsTable.companyId, companyId));
+        .where(eq(accountsTable.companyId, companyId))
+        .orderBy(accountsTable.code);
 
     return result;
 }
