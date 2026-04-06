@@ -33,11 +33,19 @@ export default function CompanyDeleteForm({ company }) {
             {error && typeof error === "string" && (
                 <p className="text-red-500 text-sm" key={error}>{error}</p>
             )}
-            <div className="flex gap-4 items-center">
-                <DialogClose className="w-full">
-                    <Button className="w-full justify-center" variant="outlined" type="button" disabled={isPending}>Batal</Button>
+            <div className="grid grid-cols-2 gap-4">
+                <DialogClose>
+                    <Button className="w-full justify-center" variant="outlined" type="button" disabled={isPending}>
+                        <span className="truncate">
+                            Batal
+                        </span>
+                    </Button>
                 </DialogClose>
-                <Button variant="danger" className="w-full justify-center" disabled={isPending}>Ya, hapus</Button>
+                <Button variant="danger" className="w-full justify-center truncate" disabled={isPending}>
+                    <span className="truncate">
+                        Ya, hapus
+                    </span>
+                </Button>
             </div>
         </form>
     );
