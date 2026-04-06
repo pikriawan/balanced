@@ -11,17 +11,17 @@ export async function createCompany(formData) {
     const session = await auth();
 
     if (!session?.user) {
-        return;
+        return {
+            success: false,
+            error: "Tidak terautentikasi"
+        };
     }
 
     const schema = z.object({
         name: z.string().nonempty("Nama perusahaan tidak boleh kosong")
     });
 
-    const rawFormData = {
-        name: formData.get("name")
-    };
-
+    const rawFormData = Object.fromEntries(formData);
     const validatedFields = schema.safeParse(rawFormData);
 
     if (!validatedFields.success) {
@@ -73,17 +73,17 @@ export async function updateCompany(companyId, formData) {
     const session = await auth();
 
     if (!session?.user) {
-        return;
+        return {
+            success: false,
+            error: "Tidak terautentikasi"
+        };
     }
 
     const schema = z.object({
         name: z.string().nonempty("Nama perusahaan tidak boleh kosong")
     });
 
-    const rawFormData = {
-        name: formData.get("name")
-    };
-
+    const rawFormData = Object.fromEntries(formData);
     const validatedFields = schema.safeParse(rawFormData);
 
     if (!validatedFields.success) {

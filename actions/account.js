@@ -17,23 +17,6 @@ export async function createAccount(companyId, formData) {
         };
     }
 
-    let result = await db
-        .select({ id: companiesTable.id })
-        .from(companiesTable)
-        .where(
-            and(
-                eq(companiesTable.id, companyId),
-                eq(companiesTable.userId, session.user.id)
-            )
-        );
-
-    if (result.length === 0) {
-        return {
-            success: false,
-            error: "Perusahaan tidak ditemukan"
-        };
-    }
-
     const schema = z.object({
         code: z.string().nonempty("Kode akun tidak boleh kosong"),
         type: z.enum(["asset", "liability", "equity", "revenue", "expense"], "Tipe akun tidak valid"),
@@ -48,6 +31,23 @@ export async function createAccount(companyId, formData) {
         return {
             success: false,
             error: z.flattenError(validatedFields.error).fieldErrors
+        };
+    }
+
+    let result = await db
+        .select({ id: companiesTable.id })
+        .from(companiesTable)
+        .where(
+            and(
+                eq(companiesTable.id, companyId),
+                eq(companiesTable.userId, session.user.id)
+            )
+        );
+
+    if (result.length === 0) {
+        return {
+            success: false,
+            error: "Perusahaan tidak ditemukan"
         };
     }
 
@@ -96,7 +96,6 @@ export async function createAccount(companyId, formData) {
             cashflowCategory = "operating";
         }
     }
-
 
     try {
         await db
