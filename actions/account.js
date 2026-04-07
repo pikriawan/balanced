@@ -195,10 +195,25 @@ export async function updateAccount(accountId, formData) {
         };
     }
 
+    let cashflowCategory = null;
+
+    if (!validatedFields.data.isCash) {
+        if (validatedFields.data.type === "asset") {
+            cashflowCategory = "investing";
+        } else if (validatedFields.data.type === "liability" || validatedFields.data.type === "equity") {
+            cashflowCategory = "financing";
+        } else {
+            cashflowCategory = "operating";
+        }
+    }
+
     try {
         await db
             .update(accountsTable)
-            .set(validatedFields.data)
+            .set({
+                ...validatedFields.data,
+                cashflowCategory
+            })
             .where(eq(accountsTable.id, accountId));
     } catch (error) {
         return {
