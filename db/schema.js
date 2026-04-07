@@ -28,7 +28,7 @@ export const accountsTable = pgTable("accounts", {
     cashflowCategory: cashflowCategoriesEnum()
 });
 
-export const journalEntriesTable = pgTable("journal_entries", {
+export const journalsTable = pgTable("journals", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
     companyId: t.integer("company_id").notNull().references(() => companiesTable.id, { onDelete: "cascade" }),
     number: t.varchar().notNull(),
@@ -36,9 +36,9 @@ export const journalEntriesTable = pgTable("journal_entries", {
     description: t.text()
 });
 
-export const journalEntryDetailsTable = pgTable("journal_entry_details", {
+export const journalLinesTable = pgTable("journal_lines", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-    journalEntryId: t.integer("journal_entry_id").notNull().references(() => journalEntriesTable.id, { onDelete: "cascade" }),
+    journalId: t.integer("journal_id").notNull().references(() => journalsTable.id, { onDelete: "cascade" }),
     accountId: t.integer("account_id").notNull().references(() => accountsTable.id, { onDelete: "cascade" }),
     debit: t.numeric().notNull().default("0"),
     credit: t.numeric().notNull().default("0")

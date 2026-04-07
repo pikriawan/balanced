@@ -1,5 +1,5 @@
 import { and, eq } from "drizzle-orm";
-import { accountsTable, companiesTable, journalEntryDetailsTable } from "@/db/schema";
+import { accountsTable, companiesTable, journalLinesTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
@@ -56,8 +56,8 @@ export async function getAccountBalance(companyId, accountId) {
 
     result = await db
         .select()
-        .from(journalEntryDetailsTable)
-        .where(eq(journalEntryDetailsTable.accountId, accountId));
+        .from(journalLinesTable)
+        .where(eq(journalLinesTable.accountId, accountId));
 
     if (result.length === 0) {
         return 0;

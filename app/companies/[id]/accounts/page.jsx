@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { getAccountBalance, getAccounts } from "@/data/account";
 import { getCompany } from "@/data/company";
 
-export default async function CompanyAccountsPage({ params }) {
+export default async function AccountsPage({ params }) {
     const { id } = await params;
     const company = await getCompany(id);
     const accounts = await getAccounts(company.id);

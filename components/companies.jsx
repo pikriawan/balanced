@@ -12,7 +12,7 @@ export default async function Companies() {
         <div className="w-full max-w-md flex flex-col">
             {companies.map((company) => (
                 <div className="flex bg-neutral-950 border-x border-b border-neutral-800 first:border-t first:rounded-t-lg last:rounded-b-lg" key={company.id}>
-                    <Link title={company.name} className="w-full flex px-4 py-2 overflow-hidden" href={`/company/${company.id}/accounts`}>
+                    <Link title={company.name} className="w-full flex px-4 py-2 overflow-hidden" href={`/companies/${company.id}/accounts`}>
                         <p className="truncate">
                             {company.name}
                         </p>
