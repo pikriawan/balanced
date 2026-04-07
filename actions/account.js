@@ -228,3 +228,62 @@ export async function updateAccount(accountId, formData) {
         success: true
     };
 }
+
+export async function deleteAccount(accountId) {
+    const session = await auth();
+
+    if (!session?.user) {
+        return {
+            success: false,
+            error: "Tidak terautentikasi"
+        };
+    }
+
+    let result = await db
+        .select({ companyId: accountsTable.companyId })
+        .from(accountsTable)
+        .where(eq(accountsTable.id, accountId));
+
+    if (result.length === 0) {
+        return {
+            success: false,
+            error: "Akun tidak ditemukan"
+        };
+    }
+
+    const { companyId } = result[0];
+
+    result = await db
+        .select({ id: companiesTable.id })
+        .from(companiesTable)
+        .where(
+            and(
+                eq(companiesTable.id, companyId),
+                eq(companiesTable.userId, session.user.id)
+            )
+        );
+
+    if (result.length === 0) {
+        return {
+            success: false,
+            error: "Anda tidak memiliki akses untuk menghapus akun ini"
+        };
+    }
+
+    try {
+        await db
+            .delete(accountsTable)
+            .where(eq(accountsTable.id, accountId));
+    } catch (error) {
+        return {
+            success: false,
+            error: "Gagal menghapus akun"
+        };
+    }
+
+    refresh();
+
+    return {
+        success: true
+    };
+}

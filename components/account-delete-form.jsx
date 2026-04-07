@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext, useState } from "react";
+import { deleteAccount } from "@/actions/account";
 import Button from "@/components/ui/button";
 import { DialogClose, DialogContext } from "@/components/ui/dialog";
 
@@ -15,7 +16,7 @@ export default function AccountDeleteForm({ account }) {
         setIsPending(true);
         setError(null);
 
-        const response = await Promise.resolve({ success: true });
+        const response = await deleteAccount(account.id);
 
         setIsPending(false);
 
