@@ -10,7 +10,7 @@ export default async function JournalsPage({ params }) {
     return (
         <div className="p-4 flex flex-col items-start gap-4">
             <h2 className="font-medium text-2xl">Jurnal</h2>
-            <ButtonLink href="#">
+            <ButtonLink href={`/companies/${id}/journals/create`}>
                 <Plus size={16} />
                 Buat jurnal baru
             </ButtonLink>
