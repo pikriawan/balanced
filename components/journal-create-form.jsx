@@ -4,9 +4,10 @@ import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import Button from "@/components/ui/button";
 import ButtonLink from "@/components/ui/button-link";
-import Select from "@/components/ui/select";
-import TextField from "@/components/ui/text-field";
 import { Field, FieldLabel } from "@/components/ui/field";
+import Select from "@/components/ui/select";
+import TextArea from "@/components/ui/text-area";
+import TextField from "@/components/ui/text-field";
 
 export default function JournalCreateForm({ companyId, accounts }) {
     const [journalLines, setJournalLines] = useState([
@@ -36,7 +37,7 @@ export default function JournalCreateForm({ companyId, accounts }) {
             </Field>
             <Field>
                 <FieldLabel htmlFor="journalCreate_description">Keterangan</FieldLabel>
-                <TextField id="journalCreate_description" />
+                <TextArea id="journalCreate_description" />
             </Field>
             <div className="w-full p-1 overflow-x-auto">
                 <div className="w-4xl flex flex-col gap-2">
