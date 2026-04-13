@@ -14,7 +14,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
-        <html className={`${geist.variable} antialiased bg-neutral-950`}>
+        <html className={`${geist.variable} antialiased scheme-dark bg-neutral-950`}>
             <body className="bg-neutral-950 text-neutral-50">
                 {children}
                 {process.env.NODE_ENV !== "production" && <ErudaNoSsr />}

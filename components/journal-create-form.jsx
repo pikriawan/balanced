@@ -14,30 +14,30 @@ export default function JournalCreateForm({ companyId, accounts }) {
         {
             id: 0,
             name: "",
-            debit: 0,
-            credit: 0
+            debit: "",
+            credit: ""
         },
         {
             id: 1,
             name: "",
-            debit: 0,
-            credit: 0
+            debit: "",
+            credit: ""
         }
     ]);
 
     return (
         <div className="w-full flex flex-col items-start gap-4">
-            <Field>
+            <Field className="w-full">
                 <FieldLabel htmlFor="journalCreate_date">Tanggal</FieldLabel>
-                <TextField id="journalCreate_date" type="date" />
+                <TextField className="w-full max-w-3xs" id="journalCreate_date" type="date" />
             </Field>
-            <Field>
-                <FieldLabel htmlFor="journalCreate_description">Nomor jurnal</FieldLabel>
-                <TextField id="journalCreate_description" />
+            <Field className="w-full">
+                <FieldLabel htmlFor="journalCreate_number">Nomor jurnal</FieldLabel>
+                <TextField className="w-full max-w-3xs" id="journalCreate_number" placeholder="JU00001" />
             </Field>
-            <Field>
+            <Field className="w-full">
                 <FieldLabel htmlFor="journalCreate_description">Keterangan</FieldLabel>
-                <TextArea id="journalCreate_description" />
+                <TextArea className="w-full max-w-3xs" id="journalCreate_description" placeholder="Keterangan" />
             </Field>
             <div className="w-full p-1 overflow-x-auto">
                 <div className="w-4xl flex flex-col gap-2">
@@ -57,8 +57,8 @@ export default function JournalCreateForm({ companyId, accounts }) {
                                             <option key={account.id} value={account.id}>{account.name}</option>
                                         ))}
                                     </Select>
-                                    <TextField type="number" defaultValue={journalLine.debit} />
-                                    <TextField type="number" defaultValue={journalLine.credit} />
+                                    <TextField type="number" defaultValue={journalLine.debit} placeholder="0" />
+                                    <TextField type="number" defaultValue={journalLine.credit} placeholder="0" />
                                     <Trash2
                                         size={16}
                                         color="oklch(63.7% 0.237 25.331)"
@@ -82,8 +82,8 @@ export default function JournalCreateForm({ companyId, accounts }) {
                         return prevJournalLines.concat({
                             id: prevJournalLines.length === 0 ? 0 : prevJournalLines.at(-1).id + 1,
                             name: "",
-                            debit: 0,
-                            credit: 0
+                            debit: "",
+                            credit: ""
                         });
                     });
                 }}
@@ -93,7 +93,7 @@ export default function JournalCreateForm({ companyId, accounts }) {
             </Button>
             <div className="flex items-center gap-4">
                 <ButtonLink href={`/companies/${companyId}/journals`} variant="outlined">Batal</ButtonLink>
-                <Button>Record</Button>
+                <Button>Simpan jurnal</Button>
             </div>
         </div>
     );
