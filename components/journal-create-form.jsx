@@ -14,13 +14,13 @@ export default function JournalCreateForm({ companyId, accounts }) {
     const [journalLines, setJournalLines] = useState([
         {
             id: 0,
-            name: "",
+            accountId: "",
             debit: "",
             credit: ""
         },
         {
             id: 1,
-            name: "",
+            accountId: "",
             debit: "",
             credit: ""
         }
@@ -33,13 +33,7 @@ export default function JournalCreateForm({ companyId, accounts }) {
         event.preventDefault();
 
         const formData = new FormData(event.target);
-        const journalLinesString = JSON.stringify(journalLines.map((journalLine) => {
-            return {
-                name: journalLine.name,
-                debit: journalLine.debit,
-                credit: journalLine.credit
-            };
-        }));
+        const journalLinesString = JSON.stringify(journalLines.map(({ accountId, debit, credit }) => ({ accountId, debit, credit })));
         formData.append("journalLines", journalLinesString);
 
         setIsPending(true);
@@ -64,16 +58,37 @@ export default function JournalCreateForm({ companyId, accounts }) {
     return (
         <form className="w-full flex flex-col items-start gap-4" onSubmit={onSubmit}>
             <Field className="w-full">
-                <FieldLabel htmlFor="journalCreate_date" ref={autoFocusRef}>Tanggal</FieldLabel>
-                <TextField className="w-full max-w-3xs" id="journalCreate_date" name="date" type="date" />
+                <FieldLabel htmlFor="journalCreate_date">Tanggal</FieldLabel>
+                <TextField className="w-full max-w-3xs" id="journalCreate_date" name="date" type="date" ref={autoFocusRef} />
+                {error?.date?.length > 0 && (
+                    <Field>
+                        {error.date.map((e) => (
+                            <p className="text-red-500 text-sm" key={e}>{e}</p>
+                        ))}
+                    </Field>
+                )}
             </Field>
             <Field className="w-full">
                 <FieldLabel htmlFor="journalCreate_number">Nomor jurnal</FieldLabel>
                 <TextField className="w-full max-w-3xs" id="journalCreate_number" name="number" placeholder="JU00001" />
+                {error?.number?.length > 0 && (
+                    <Field>
+                        {error.number.map((e) => (
+                            <p className="text-red-500 text-sm" key={e}>{e}</p>
+                        ))}
+                    </Field>
+                )}
             </Field>
             <Field className="w-full">
                 <FieldLabel htmlFor="journalCreate_description">Keterangan</FieldLabel>
                 <TextArea className="w-full max-w-3xs" id="journalCreate_description" name="description" placeholder="Keterangan" />
+                {error?.description?.length > 0 && (
+                    <Field>
+                        {error.description.map((e) => (
+                            <p className="text-red-500 text-sm" key={e}>{e}</p>
+                        ))}
+                    </Field>
+                )}
             </Field>
             <div className="w-full p-1 overflow-x-auto">
                 <div className="w-4xl flex flex-col gap-2">
@@ -87,21 +102,73 @@ export default function JournalCreateForm({ companyId, accounts }) {
                         <div className="flex flex-col gap-4">
                             {journalLines.map((journalLine) => (
                                 <div className="grid grid-cols-[repeat(3,1fr)_auto] items-center gap-4" key={journalLine.id}>
-                                    <Select>
+                                    <Select
+                                        value={journalLine.accountId}
+                                        onChange={(event) => {
+                                            setJournalLines(journalLines.map((j) => {
+                                                if (j.id === journalLine.id) {
+                                                    return {
+                                                        id: j.id,
+                                                        accountId: event.target.value,
+                                                        debit: j.debit,
+                                                        credit: j.credit
+                                                    };
+                                                }
+
+                                                return j;
+                                            }));
+                                        }}
+                                    >
                                         <option value="">Pilih akun</option>
                                         {accounts.length > 0 && accounts.map((account) => (
                                             <option key={account.id} value={account.id}>{account.name}</option>
                                         ))}
                                     </Select>
-                                    <TextField type="number" defaultValue={journalLine.debit} placeholder="0" />
-                                    <TextField type="number" defaultValue={journalLine.credit} placeholder="0" />
+                                    <TextField
+                                        type="number"
+                                        step="any"
+                                        placeholder="0"
+                                        value={journalLine.debit}
+                                        onChange={(event) => {
+                                            setJournalLines(journalLines.map((j) => {
+                                                if (j.id === journalLine.id) {
+                                                    return {
+                                                        id: j.id,
+                                                        accountId: j.accountId,
+                                                        debit: event.target.value,
+                                                        credit: j.credit
+                                                    };
+                                                }
+
+                                                return j;
+                                            }));
+                                        }}
+                                    />
+                                    <TextField
+                                        type="number"
+                                        step="any"
+                                        placeholder="0"
+                                        value={journalLine.credit}
+                                        onChange={(event) => {
+                                            setJournalLines(journalLines.map((j) => {
+                                                if (j.id === journalLine.id) {
+                                                    return {
+                                                        id: j.id,
+                                                        accountId: j.accountId,
+                                                        debit: j.debit,
+                                                        credit: event.target.value
+                                                    };
+                                                }
+
+                                                return j;
+                                            }));
+                                        }}
+                                    />
                                     <Trash2
                                         size={16}
                                         color="oklch(63.7% 0.237 25.331)"
                                         onClick={() => {
-                                            setJournalLines((prevJournalLines) => {
-                                                return prevJournalLines.filter((prevJournalLine) => prevJournalLine.id !== journalLine.id);
-                                            });
+                                            setJournalLines(journalLines.filter((j) => j.id !== journalLine.id));
                                         }}
                                     />
                                 </div>
@@ -114,19 +181,20 @@ export default function JournalCreateForm({ companyId, accounts }) {
                 type="button"
                 variant="outlined"
                 onClick={() => {
-                    setJournalLines((prevJournalLines) => {
-                        return prevJournalLines.concat({
-                            id: prevJournalLines.length === 0 ? 0 : prevJournalLines.at(-1).id + 1,
-                            name: "",
-                            debit: "",
-                            credit: ""
-                        });
-                    });
+                    setJournalLines(journalLines.concat({
+                        id: journalLines.length === 0 ? 0 : journalLines.at(-1).id + 1,
+                        accountId: "",
+                        debit: "",
+                        credit: ""
+                    }));
                 }}
             >
                 <Plus size={16} />
                 Tambah baris baru
             </Button>
+            {error && typeof error === "string" && (
+                <p className="text-red-500 text-sm" key={error}>{error}</p>
+            )}
             <div className="grid grid-cols-2 gap-4">
                 <ButtonLink className="w-full justify-center" href={`/companies/${companyId}/journals`} variant="outlined" disabled={isPending}>
                     <span className="truncate">
