@@ -1,11 +1,13 @@
 import { Plus } from "lucide-react";
+import Journals from "@/components/journals";
 import ButtonLink from "@/components/ui/button-link";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { getCompany } from "@/data/company";
+import { getJournals } from "@/data/journal";
 
 export default async function JournalsPage({ params }) {
     const { id } = await params;
     const company = await getCompany(id);
+    const journals = await getJournals(company.id);
 
     return (
         <div className="p-4 flex flex-col items-start gap-4">
@@ -14,6 +16,7 @@ export default async function JournalsPage({ params }) {
                 <Plus size={16} />
                 Buat jurnal baru
             </ButtonLink>
+            <Journals journals={journals} />
         </div>
     );
 }
