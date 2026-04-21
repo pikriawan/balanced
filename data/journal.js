@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { journalsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
@@ -16,7 +16,8 @@ export async function getLastJournalNumber(companyId) {
         .select({ number: journalsTable.number })
         .from(journalsTable)
         .where(eq(journalsTable.companyId, companyId))
-        .orderBy(journalsTable.createdAt);
+        .orderBy(desc(journalsTable.createdAt))
+        .limit(1);
 
     if (result.length === 0) {
         number = 1;
