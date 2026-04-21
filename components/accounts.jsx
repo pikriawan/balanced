@@ -19,6 +19,21 @@ function getAccountTypeText(accountType) {
     }
 }
 
+function formatRupiahFromString(value, digits = 2) {
+    const isNegative = value.startsWith("-");
+
+    const number = isNegative ? value.slice(1) : value;
+
+    const formatted = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+    }).format(Number(number));
+
+    return isNegative ? `(${formatted})` : formatted;
+}
+
 export default async function Accounts({ accounts }) {
     return (
         <div className="w-full relative overflow-x-auto bg-neutral-950 rounded-lg border border-neutral-800">
@@ -38,7 +53,7 @@ export default async function Accounts({ accounts }) {
                             <TableCell>{account.code}</TableCell>
                             <TableCell>{account.name}</TableCell>
                             <TableCell>{getAccountTypeText(account.type)}</TableCell>
-                            <TableCell>{account.balance}</TableCell>
+                            <TableCell>{formatRupiahFromString(account.balance)}</TableCell>
                             <TableCell>
                                 <Dialog>
                                     <DialogTrigger>

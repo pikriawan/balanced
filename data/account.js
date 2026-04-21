@@ -1,3 +1,4 @@
+import Decimal from "decimal.js";
 import { and, eq } from "drizzle-orm";
 import { accountsTable, companiesTable, journalLinesTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
@@ -63,12 +64,12 @@ export async function getAccountBalance(companyId, accountId) {
         return 0;
     }
 
-    let balance = 0;
+    let balance = new Decimal("0");
 
-    for (const journalEntryDetail of result) {
-        balance += journalEntryDetail.debit;
-        balance -= journalEntryDetail.credit;
+    for (const journalLine of result) {
+        balance = balance.plus(new Decimal(journalLine.debit));
+        balance = balance.minus(new Decimal(journalLine.credit));
     }
 
-    return balance;
+    return balance.toString();
 }
