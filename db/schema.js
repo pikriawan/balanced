@@ -33,7 +33,9 @@ export const journalsTable = pgTable("journals", {
     companyId: t.integer("company_id").notNull().references(() => companiesTable.id, { onDelete: "cascade" }),
     number: t.varchar().notNull(),
     date: t.date().notNull(),
-    description: t.text()
+    description: t.text(),
+    createdAt: t.timestamp("created_at").defaultNow(),
+    updatedAt: t.timestamp("updated_at").defaultNow()
 });
 
 export const journalLinesTable = pgTable("journal_lines", {

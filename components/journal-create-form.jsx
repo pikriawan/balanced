@@ -10,7 +10,7 @@ import Select from "@/components/ui/select";
 import TextArea from "@/components/ui/text-area";
 import TextField from "@/components/ui/text-field";
 
-export default function JournalCreateForm({ companyId, accounts }) {
+export default function JournalCreateForm({ companyId, accounts, lastJournalNumber }) {
     const [journalLines, setJournalLines] = useState([
         {
             id: 0,
@@ -70,7 +70,7 @@ export default function JournalCreateForm({ companyId, accounts }) {
             </Field>
             <Field className="w-full">
                 <FieldLabel htmlFor="journalCreate_number">Nomor jurnal</FieldLabel>
-                <TextField className="w-full max-w-3xs" id="journalCreate_number" name="number" placeholder="JU00001" />
+                <TextField className="w-full max-w-3xs" id="journalCreate_number" name="number" placeholder="JU00001" defaultValue={lastJournalNumber} />
                 {error?.number?.length > 0 && (
                     <Field>
                         {error.number.map((e) => (
