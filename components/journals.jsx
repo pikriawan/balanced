@@ -40,8 +40,8 @@ export default async function Journals({ journals }) {
                         <TableHead className="border-r">Nomor</TableHead>
                         <TableHead className="border-r" colSpan="2">Deskripsi</TableHead>
                         <TableHead className="border-r">Ref</TableHead>
-                        <TableHead className="border-r">Debit</TableHead>
-                        <TableHead className="border-r">Kredit</TableHead>
+                        <TableHead className="border-r" hAlign="end">Debit</TableHead>
+                        <TableHead className="border-r" hAlign="end">Kredit</TableHead>
                         <TableHead className="border-r">Aksi</TableHead>
                     </TableRow>
                 </TableHeader>

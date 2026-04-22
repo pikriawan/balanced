@@ -44,7 +44,7 @@ export default async function Accounts({ accounts }) {
                         <TableHead>Kode akun</TableHead>
                         <TableHead>Nama akun</TableHead>
                         <TableHead>Tipe akun</TableHead>
-                        <TableHead>Saldo</TableHead>
+                        <TableHead hAlign="end">Saldo</TableHead>
                         <TableHead>Aksi</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -54,7 +54,7 @@ export default async function Accounts({ accounts }) {
                             <TableCell>{account.code}</TableCell>
                             <TableCell>{account.name}</TableCell>
                             <TableCell>{getAccountTypeText(account.type)}</TableCell>
-                            <TableCell>{formatRupiahFromString(account.balance)}</TableCell>
+                            <TableCell hAlign="end">{formatRupiahFromString(account.balance)}</TableCell>
                             <TableCell>
                                 <Dialog>
                                     <DialogTrigger>
