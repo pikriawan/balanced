@@ -35,6 +35,7 @@ function formatRupiahFromString(value, digits = 2) {
 }
 
 export default async function Accounts({ accounts }) {
+    console.log(accounts[0]);
     return (
         <div className="w-full relative overflow-x-auto bg-neutral-950 rounded-lg border border-neutral-800">
             <Table className="w-full">

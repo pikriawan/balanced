@@ -61,7 +61,7 @@ export async function getAccountBalance(companyId, accountId) {
         .where(eq(journalLinesTable.accountId, accountId));
 
     if (result.length === 0) {
-        return 0;
+        return new Decimal("0").toString();
     }
 
     let balance = new Decimal("0");
