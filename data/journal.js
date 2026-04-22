@@ -18,25 +18,6 @@ export async function getJournals(companyId) {
         .leftJoin(journalLinesTable, eq(journalsTable.id, journalLinesTable.journalId));
 
     return result;
-
-    // const journals = [];
-
-    // for (const row of result) {
-    //     if (!journals.some((j) => j.id === row.journals.id)) {
-    //         journals.push({
-    //             ...row.journals,
-    //             journalLines: []
-    //         });
-    //     }
-
-    //     const index = journals.findIndex((j) => j.id === row.journals.id);
-
-    //     if (index !== -1) {
-    //         journals[index].journalLines.push(row.journal_lines);
-    //     }
-    // }
-
-    // return journals;
 }
 
 export async function getLastJournalNumber(companyId) {
@@ -56,7 +37,7 @@ export async function getLastJournalNumber(companyId) {
         .limit(1);
 
     if (result.length === 0) {
-        number = 1;
+        number = 0;
     } else {
         number = parseInt(result[0].number.match(/[\d]/g).join(""));
     }
