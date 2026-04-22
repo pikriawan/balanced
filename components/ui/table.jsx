@@ -50,7 +50,7 @@ export function TableRow({ children, ...props }) {
     );
 }
 
-export function TableHead({ className, vAlign = "top", hAlign = "start", children, ...props }) {
+export function TableHead({ className, vAlign = "middle", hAlign = "start", children, ...props }) {
     return (
         <th className={cn("px-4 py-2 font-medium bg-neutral-900 border-r border-b border-neutral-800", vAlignClass[vAlign], className)} {...props}>
             <div className={cn("flex items-center gap-4 whitespace-nowrap", justifyClass[hAlign], textAlignClass[hAlign])}>
@@ -60,7 +60,7 @@ export function TableHead({ className, vAlign = "top", hAlign = "start", childre
     );
 }
 
-export function TableCell({ className, vAlign = "top", hAlign = "start", children, ...props }) {
+export function TableCell({ className, vAlign = "middle", hAlign = "start", children, ...props }) {
     return (
         <td className={cn("px-4 py-2 bg-neutral-950 border-r border-b border-neutral-800", vAlignClass[vAlign], className)} {...props}>
             <div className={cn("flex items-center gap-4 whitespace-nowrap", justifyClass[hAlign], textAlignClass[hAlign])}>
