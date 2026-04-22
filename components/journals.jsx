@@ -49,7 +49,7 @@ export default async function Journals({ journals }) {
                             <TableRow>
                                 <TableCell>{row.isFirstRow && row.journals.date}</TableCell>
                                 <TableCell>{row.isFirstRow && row.journals.number}</TableCell>
-                                <TableCell>{row.accounts.name}</TableCell>
+                                <TableCell className={row.journal_lines.credit !== "0" && "pl-16"}>{row.accounts.name}</TableCell>
                                 <TableCell>{row.accounts.code}</TableCell>
                                 <TableCell hAlign="end">{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
                                 <TableCell hAlign="end">{row.journal_lines.credit === "0" ? "-" : formatRupiahFromString(row.journal_lines.credit)}</TableCell>

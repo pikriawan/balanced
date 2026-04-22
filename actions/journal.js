@@ -149,7 +149,7 @@ export async function createJournal(companyId, formData) {
             .values(journalLines.map((journalLine) => ({
                 journalId: result[0].id,
                 ...journalLine
-            })));
+            })).toReversed());
     } catch {
         return {
             success: false,
