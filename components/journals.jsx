@@ -1,5 +1,6 @@
 import Decimal from "decimal.js";
 import { SquarePen, Trash2 } from "lucide-react";
+import { Fragment } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 function formatRupiahFromString(value, digits = 2) {
@@ -19,11 +20,10 @@ function formatRupiahFromString(value, digits = 2) {
 
 export default async function Journals({ journals }) {
     const rows = journals.map((journal, i) => {
-        return {
-            ...journal,
-            isFirstRow: journals.findIndex((j) => j.journals.id === journal.journals.id) === i,
-            rowSpan: journals.filter((j) => j.journals.id === journal.journals.id).length
-        };
+        const isFirstRow = journals.findIndex((j) => j.journals.id === journal.journals.id) === i;
+        const isLastRow = journals.findLastIndex((j) => j.journals.id === journal.journals.id) === i;
+
+        return { ...journal, isFirstRow, isLastRow };
     });
 
     const totalDebit = rows.reduce((prev, curr) => new Decimal(prev).plus(new Decimal(curr.journal_lines.debit)), new Decimal("0")).toString();
@@ -36,7 +36,7 @@ export default async function Journals({ journals }) {
                     <TableRow>
                         <TableHead>Tanggal</TableHead>
                         <TableHead>Nomor</TableHead>
-                        <TableHead colSpan="2">Deskripsi</TableHead>
+                        <TableHead>Deskripsi</TableHead>
                         <TableHead>Ref</TableHead>
                         <TableHead hAlign="end">Debit</TableHead>
                         <TableHead hAlign="end">Kredit</TableHead>
@@ -45,28 +45,41 @@ export default async function Journals({ journals }) {
                 </TableHeader>
                 <TableBody>
                     {rows.length > 0 && rows.map((row) => (
-                        <TableRow key={row.journal_lines.id}>
-                            {row.isFirstRow && (
-                                <>
-                                    <TableCell rowSpan={row.rowSpan}>{row.journals.date}</TableCell>
-                                    <TableCell rowSpan={row.rowSpan}>{row.journals.number}</TableCell>
-                                </>
-                            )}
-                            <TableCell className="border-r-0">{row.journal_lines.debit !== "0" && row.accounts.name}</TableCell>
-                            <TableCell>{row.journal_lines.credit !== "0" && row.accounts.name}</TableCell>
-                            <TableCell>{row.accounts.code}</TableCell>
-                            <TableCell hAlign="end">{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
-                            <TableCell hAlign="end">{row.journal_lines.credit === "0" ? "-" : formatRupiahFromString(row.journal_lines.credit)}</TableCell>
-                            {row.isFirstRow && (
-                                <TableCell rowSpan={row.rowSpan}>
-                                    <SquarePen size={16} color="oklch(98.5% 0 0)" />
-                                    <Trash2 size={16} color="oklch(63.7% 0.237 25.331)" />
+                        <Fragment key={row.journal_lines.id}>
+                            <TableRow>
+                                <TableCell>{row.isFirstRow && row.journals.date}</TableCell>
+                                <TableCell>{row.isFirstRow && row.journals.number}</TableCell>
+                                <TableCell>{row.accounts.name}</TableCell>
+                                <TableCell>{row.accounts.code}</TableCell>
+                                <TableCell hAlign="end">{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
+                                <TableCell hAlign="end">{row.journal_lines.credit === "0" ? "-" : formatRupiahFromString(row.journal_lines.credit)}</TableCell>
+                                <TableCell>
+                                    {row.isFirstRow && (
+                                        <>
+                                            <SquarePen size={16} color="oklch(98.5% 0 0)" />
+                                            <Trash2 size={16} color="oklch(63.7% 0.237 25.331)" />
+                                        </>
+                                    )}
                                 </TableCell>
+                            </TableRow>
+                            {(row.isLastRow && row.journals.description !== "") && (
+                                <TableRow>
+                                    <TableCell />
+                                    <TableCell />
+                                    <TableCell>({row.journals.description})</TableCell>
+                                    <TableCell />
+                                    <TableCell />
+                                    <TableCell />
+                                    <TableCell />
+                                </TableRow>
                             )}
-                        </TableRow>
+                        </Fragment>
                     ))}
                     <TableRow>
-                        <TableCell colSpan="5">Jumlah</TableCell>
+                        <TableCell>Jumlah</TableCell>
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
                         <TableCell hAlign="end">{formatRupiahFromString(totalDebit)}</TableCell>
                         <TableCell hAlign="end">{formatRupiahFromString(totalCredit)}</TableCell>
                         <TableCell />
