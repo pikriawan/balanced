@@ -3,7 +3,7 @@ import { SquarePen, Trash2 } from "lucide-react";
 import { Fragment } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-function formatRupiahFromString(value, digits = 2) {
+function formatRupiahFromString(value) {
     const isNegative = value.startsWith("-");
 
     const number = isNegative ? value.slice(1) : value;
@@ -11,8 +11,8 @@ function formatRupiahFromString(value, digits = 2) {
     const formatted = new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
-        minimumFractionDigits: digits,
-        maximumFractionDigits: digits
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 100
     }).format(Number(number));
 
     return isNegative ? `(${formatted})` : formatted;
