@@ -3,7 +3,7 @@
 import { and, eq, ne } from "drizzle-orm";
 import { refresh } from "next/cache";
 import { z } from "zod";
-import { accountsTable, companiesTable, journalEntryDetailsTable } from "@/db/schema";
+import { accountsTable, companiesTable, journalEntryDetailsTable, journalLinesTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
@@ -267,6 +267,19 @@ export async function deleteAccount(accountId) {
         return {
             success: false,
             error: "Anda tidak memiliki akses untuk menghapus akun ini"
+        };
+    }
+
+    result = await db
+        .select({ id: journalLinesTable.id })
+        .from(journalLinesTable)
+        .where(eq(journalLinesTable.accountId, accountId))
+        .limit(1);
+
+    if (result.length > 0) {
+        return {
+            success: false,
+            error: "Akun tidak dapat dihapus karena sudah digunakan dalam transaksi jurnal"
         };
     }
 
