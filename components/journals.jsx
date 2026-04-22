@@ -39,6 +39,7 @@ export default async function Journals({ journals }) {
                         <TableHead className="border-r">Tanggal</TableHead>
                         <TableHead className="border-r">Nomor</TableHead>
                         <TableHead className="border-r" colSpan="2">Deskripsi</TableHead>
+                        <TableHead className="border-r">Ref</TableHead>
                         <TableHead className="border-r">Debit</TableHead>
                         <TableHead className="border-r">Kredit</TableHead>
                         <TableHead className="border-r">Aksi</TableHead>
@@ -55,6 +56,7 @@ export default async function Journals({ journals }) {
                             )}
                             <TableCell>{row.journal_lines.debit !== "0" && row.accounts.name}</TableCell>
                             <TableCell className="border-r">{row.journal_lines.credit !== "0" && row.accounts.name}</TableCell>
+                            <TableCell className="border-r">{row.accounts.code}</TableCell>
                             <TableCell className="border-r justify-end">{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
                             <TableCell className="border-r justify-end">{row.journal_lines.credit === "0" ? "-" : formatRupiahFromString(row.journal_lines.credit)}</TableCell>
                             {row.isFirstRow && (
@@ -66,7 +68,7 @@ export default async function Journals({ journals }) {
                         </TableRow>
                     ))}
                     <TableRow>
-                        <TableCell className="border-r" colSpan="4">Jumlah</TableCell>
+                        <TableCell className="border-r" colSpan="5">Jumlah</TableCell>
                         <TableCell className="border-r">{formatRupiahFromString(totalDebit)}</TableCell>
                         <TableCell className="border-r">{formatRupiahFromString(totalCredit)}</TableCell>
                         <TableCell className="border-r" />
