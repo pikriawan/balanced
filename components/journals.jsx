@@ -26,6 +26,8 @@ export default async function Journals({ journals }) {
         };
     });
 
+    console.log(rows);
+
     const totalDebit = rows.reduce((prev, curr) => new Decimal(prev).plus(new Decimal(curr.journal_lines.debit)), new Decimal("0")).toString();
     const totalCredit = rows.reduce((prev, curr) => new Decimal(prev).plus(new Decimal(curr.journal_lines.credit)), new Decimal("0")).toString();
 
@@ -36,7 +38,7 @@ export default async function Journals({ journals }) {
                     <TableRow>
                         <TableHead className="border-r">Tanggal</TableHead>
                         <TableHead className="border-r">Nomor</TableHead>
-                        <TableHead className="border-r">Deskripsi</TableHead>
+                        <TableHead className="border-r" colSpan="2">Deskripsi</TableHead>
                         <TableHead className="border-r">Debit</TableHead>
                         <TableHead className="border-r">Kredit</TableHead>
                         <TableHead className="border-r">Aksi</TableHead>
@@ -51,7 +53,8 @@ export default async function Journals({ journals }) {
                                     <TableCell className="border-r" rowSpan={row.rowSpan}>{row.journals.number}</TableCell>
                                 </>
                             )}
-                            <TableCell className="border-r">{row.journal_lines.accountId}</TableCell>
+                            <TableCell>{row.journal_lines.debit !== "0" && row.accounts.name}</TableCell>
+                            <TableCell className="border-r">{row.journal_lines.credit !== "0" && row.accounts.name}</TableCell>
                             <TableCell className="border-r justify-end">{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
                             <TableCell className="border-r justify-end">{row.journal_lines.credit === "0" ? "-" : formatRupiahFromString(row.journal_lines.credit)}</TableCell>
                             {row.isFirstRow && (
@@ -63,7 +66,7 @@ export default async function Journals({ journals }) {
                         </TableRow>
                     ))}
                     <TableRow>
-                        <TableCell className="border-r" colSpan="3">Jumlah</TableCell>
+                        <TableCell className="border-r" colSpan="4">Jumlah</TableCell>
                         <TableCell className="border-r">{formatRupiahFromString(totalDebit)}</TableCell>
                         <TableCell className="border-r">{formatRupiahFromString(totalCredit)}</TableCell>
                         <TableCell className="border-r" />

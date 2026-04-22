@@ -1,5 +1,5 @@
 import { desc, eq } from "drizzle-orm";
-import { journalLinesTable, journalsTable } from "@/db/schema";
+import { accountsTable, journalLinesTable, journalsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
@@ -15,7 +15,8 @@ export async function getJournals(companyId) {
         .from(journalsTable)
         .where(eq(journalsTable.companyId, companyId))
         .orderBy(desc(journalsTable.date))
-        .leftJoin(journalLinesTable, eq(journalsTable.id, journalLinesTable.journalId));
+        .leftJoin(journalLinesTable, eq(journalsTable.id, journalLinesTable.journalId))
+        .leftJoin(accountsTable, eq(accountsTable.id, journalLinesTable.accountId));
 
     return result;
 }
