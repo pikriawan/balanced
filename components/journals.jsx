@@ -54,7 +54,7 @@ export default async function Journals({ journals }) {
                                     <TableCell rowSpan={row.rowSpan}>{row.journals.number}</TableCell>
                                 </>
                             )}
-                            <TableCell>{row.journal_lines.debit !== "0" && row.accounts.name}</TableCell>
+                            <TableCell className="border-r-0">{row.journal_lines.debit !== "0" && row.accounts.name}</TableCell>
                             <TableCell>{row.journal_lines.credit !== "0" && row.accounts.name}</TableCell>
                             <TableCell>{row.accounts.code}</TableCell>
                             <TableCell hAlign="end">{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
