@@ -36,13 +36,13 @@ export default async function Journals({ journals }) {
             <Table className="w-full">
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="border-r">Tanggal</TableHead>
-                        <TableHead className="border-r">Nomor</TableHead>
-                        <TableHead className="border-r" colSpan="2">Deskripsi</TableHead>
-                        <TableHead className="border-r">Ref</TableHead>
-                        <TableHead className="border-r" hAlign="end">Debit</TableHead>
-                        <TableHead className="border-r" hAlign="end">Kredit</TableHead>
-                        <TableHead className="border-r">Aksi</TableHead>
+                        <TableHead>Tanggal</TableHead>
+                        <TableHead>Nomor</TableHead>
+                        <TableHead colSpan="2">Deskripsi</TableHead>
+                        <TableHead>Ref</TableHead>
+                        <TableHead hAlign="end">Debit</TableHead>
+                        <TableHead hAlign="end">Kredit</TableHead>
+                        <TableHead>Aksi</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -50,17 +50,17 @@ export default async function Journals({ journals }) {
                         <TableRow key={row.journal_lines.id}>
                             {row.isFirstRow && (
                                 <>
-                                    <TableCell className="border-r" rowSpan={row.rowSpan}>{row.journals.date}</TableCell>
-                                    <TableCell className="border-r" rowSpan={row.rowSpan}>{row.journals.number}</TableCell>
+                                    <TableCell rowSpan={row.rowSpan}>{row.journals.date}</TableCell>
+                                    <TableCell rowSpan={row.rowSpan}>{row.journals.number}</TableCell>
                                 </>
                             )}
                             <TableCell>{row.journal_lines.debit !== "0" && row.accounts.name}</TableCell>
-                            <TableCell className="border-r">{row.journal_lines.credit !== "0" && row.accounts.name}</TableCell>
-                            <TableCell className="border-r">{row.accounts.code}</TableCell>
-                            <TableCell className="border-r" hAlign="end">{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
-                            <TableCell className="border-r" hAlign="end">{row.journal_lines.credit === "0" ? "-" : formatRupiahFromString(row.journal_lines.credit)}</TableCell>
+                            <TableCell>{row.journal_lines.credit !== "0" && row.accounts.name}</TableCell>
+                            <TableCell>{row.accounts.code}</TableCell>
+                            <TableCell hAlign="end">{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
+                            <TableCell hAlign="end">{row.journal_lines.credit === "0" ? "-" : formatRupiahFromString(row.journal_lines.credit)}</TableCell>
                             {row.isFirstRow && (
-                                <TableCell className="border-r" rowSpan={row.rowSpan}>
+                                <TableCell rowSpan={row.rowSpan}>
                                     <SquarePen size={16} color="oklch(98.5% 0 0)" />
                                     <Trash2 size={16} color="oklch(63.7% 0.237 25.331)" />
                                 </TableCell>
@@ -68,10 +68,10 @@ export default async function Journals({ journals }) {
                         </TableRow>
                     ))}
                     <TableRow>
-                        <TableCell className="border-r" colSpan="5">Jumlah</TableCell>
-                        <TableCell className="border-r" hAlign="end">{formatRupiahFromString(totalDebit)}</TableCell>
-                        <TableCell className="border-r" hAlign="end">{formatRupiahFromString(totalCredit)}</TableCell>
-                        <TableCell className="border-r" />
+                        <TableCell colSpan="5">Jumlah</TableCell>
+                        <TableCell hAlign="end">{formatRupiahFromString(totalDebit)}</TableCell>
+                        <TableCell hAlign="end">{formatRupiahFromString(totalCredit)}</TableCell>
+                        <TableCell />
                     </TableRow>
                 </TableBody>
             </Table>
