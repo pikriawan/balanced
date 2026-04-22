@@ -1,5 +1,23 @@
 import { cn } from "@/lib/utils";
 
+const vAlignClass = {
+    top: "align-top",
+    middle: "align-middle",
+    bottom: "align-bottom"
+};
+
+const justifyClass = {
+    start: "justify-start",
+    center: "justify-center",
+    end: "justify-end"
+};
+
+const textAlignClass = {
+    start: "text-start",
+    center: "text-center",
+    end: "text-end"
+};
+
 export function Table({ children, ...props }) {
     return (
         <table {...props}>
@@ -34,8 +52,8 @@ export function TableRow({ children, ...props }) {
 
 export function TableHead({ className, vAlign = "top", hAlign = "start", children, ...props }) {
     return (
-        <th className={cn("px-4 py-2 font-medium bg-neutral-900 border-r border-b border-neutral-800", `align-${vAlign}`, className)} {...props}>
-            <div className={cn("flex items-center gap-4 whitespace-nowrap", `justify-${hAlign} text-${hAlign}`)}>
+        <th className={cn("px-4 py-2 font-medium bg-neutral-900 border-r border-b border-neutral-800", vAlignClass[vAlign], className)} {...props}>
+            <div className={cn("flex items-center gap-4 whitespace-nowrap", justifyClass[hAlign], textAlignClass[hAlign])}>
                 {children}
             </div>
         </th>
@@ -44,8 +62,8 @@ export function TableHead({ className, vAlign = "top", hAlign = "start", childre
 
 export function TableCell({ className, vAlign = "top", hAlign = "start", children, ...props }) {
     return (
-        <td className={cn("px-4 py-2 bg-neutral-950 border-r border-b border-neutral-800", `align-${vAlign}`, className)} {...props}>
-            <div className={cn("flex items-center gap-4 whitespace-nowrap", `justify-${hAlign} text-${hAlign}`)}>
+        <td className={cn("px-4 py-2 bg-neutral-950 border-r border-b border-neutral-800", vAlignClass[vAlign], className)} {...props}>
+            <div className={cn("flex items-center gap-4 whitespace-nowrap", justifyClass[hAlign], textAlignClass[hAlign])}>
                 {children}
             </div>
         </td>

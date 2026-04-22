@@ -26,8 +26,6 @@ export default async function Journals({ journals }) {
         };
     });
 
-    console.log(rows);
-
     const totalDebit = rows.reduce((prev, curr) => new Decimal(prev).plus(new Decimal(curr.journal_lines.debit)), new Decimal("0")).toString();
     const totalCredit = rows.reduce((prev, curr) => new Decimal(prev).plus(new Decimal(curr.journal_lines.credit)), new Decimal("0")).toString();
 
@@ -40,8 +38,8 @@ export default async function Journals({ journals }) {
                         <TableHead>Nomor</TableHead>
                         <TableHead colSpan="2">Deskripsi</TableHead>
                         <TableHead>Ref</TableHead>
-                        <TableHead hAlign="end">Debit</TableHead>
-                        <TableHead hAlign="end">Kredit</TableHead>
+                        <TableHead>Debit</TableHead>
+                        <TableHead>Kredit</TableHead>
                         <TableHead>Aksi</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -57,8 +55,8 @@ export default async function Journals({ journals }) {
                             <TableCell className="border-r-0">{row.journal_lines.debit !== "0" && row.accounts.name}</TableCell>
                             <TableCell>{row.journal_lines.credit !== "0" && row.accounts.name}</TableCell>
                             <TableCell>{row.accounts.code}</TableCell>
-                            <TableCell hAlign="end">{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
-                            <TableCell hAlign="end">{row.journal_lines.credit === "0" ? "-" : formatRupiahFromString(row.journal_lines.credit)}</TableCell>
+                            <TableCell>{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
+                            <TableCell>{row.journal_lines.credit === "0" ? "-" : formatRupiahFromString(row.journal_lines.credit)}</TableCell>
                             {row.isFirstRow && (
                                 <TableCell rowSpan={row.rowSpan}>
                                     <SquarePen size={16} color="oklch(98.5% 0 0)" />
@@ -69,8 +67,8 @@ export default async function Journals({ journals }) {
                     ))}
                     <TableRow>
                         <TableCell colSpan="5">Jumlah</TableCell>
-                        <TableCell hAlign="end">{formatRupiahFromString(totalDebit)}</TableCell>
-                        <TableCell hAlign="end">{formatRupiahFromString(totalCredit)}</TableCell>
+                        <TableCell>{formatRupiahFromString(totalDebit)}</TableCell>
+                        <TableCell>{formatRupiahFromString(totalCredit)}</TableCell>
                         <TableCell />
                     </TableRow>
                 </TableBody>
