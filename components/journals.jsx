@@ -57,8 +57,8 @@ export default async function Journals({ journals }) {
                             <TableCell>{row.journal_lines.debit !== "0" && row.accounts.name}</TableCell>
                             <TableCell className="border-r">{row.journal_lines.credit !== "0" && row.accounts.name}</TableCell>
                             <TableCell className="border-r">{row.accounts.code}</TableCell>
-                            <TableCell className="border-r justify-end">{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
-                            <TableCell className="border-r justify-end">{row.journal_lines.credit === "0" ? "-" : formatRupiahFromString(row.journal_lines.credit)}</TableCell>
+                            <TableCell className="border-r" hAlign="end">{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
+                            <TableCell className="border-r" hAlign="end">{row.journal_lines.credit === "0" ? "-" : formatRupiahFromString(row.journal_lines.credit)}</TableCell>
                             {row.isFirstRow && (
                                 <TableCell className="border-r" rowSpan={row.rowSpan}>
                                     <SquarePen size={16} color="oklch(98.5% 0 0)" />
@@ -69,8 +69,8 @@ export default async function Journals({ journals }) {
                     ))}
                     <TableRow>
                         <TableCell className="border-r" colSpan="5">Jumlah</TableCell>
-                        <TableCell className="border-r">{formatRupiahFromString(totalDebit)}</TableCell>
-                        <TableCell className="border-r">{formatRupiahFromString(totalCredit)}</TableCell>
+                        <TableCell className="border-r" hAlign="end">{formatRupiahFromString(totalDebit)}</TableCell>
+                        <TableCell className="border-r" hAlign="end">{formatRupiahFromString(totalCredit)}</TableCell>
                         <TableCell className="border-r" />
                     </TableRow>
                 </TableBody>
