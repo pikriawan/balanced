@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, like } from "drizzle-orm";
 import { accountsTable, journalLinesTable, journalsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
@@ -28,13 +28,18 @@ export async function getLastJournalNumber(companyId) {
         return null;
     }
 
+    const prefix = "JU";
     let number;
 
     let result = await db
         .select({ number: journalsTable.number })
         .from(journalsTable)
-        .where(eq(journalsTable.companyId, companyId))
-        .orderBy(desc(journalsTable.createdAt))
+        .where(
+            and(
+                eq(journalsTable.companyId, companyId)),
+                like(journalsTable.number, `${prefix}%`)
+            )
+        .orderBy(desc(journalsTable.number))
         .limit(1);
 
     if (result.length === 0) {
@@ -45,5 +50,5 @@ export async function getLastJournalNumber(companyId) {
 
     number += 1;
 
-    return "JU" + String(number).padStart(5, "0");
+    return prefix + number.toString().padStart(5, "0");
 }
