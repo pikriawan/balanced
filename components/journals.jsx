@@ -82,7 +82,7 @@ export default async function Journals({ journals }) {
                     <TableRow>
                         <TableHead colSpan="2">Tanggal</TableHead>
                         <TableHead>Nomor</TableHead>
-                        <TableHead>Deskripsi</TableHead>
+                        <TableHead>Keterangan</TableHead>
                         <TableHead>Ref</TableHead>
                         <TableHead hAlign="end">Debit</TableHead>
                         <TableHead hAlign="end">Kredit</TableHead>
