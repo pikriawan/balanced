@@ -3,6 +3,37 @@ import { SquarePen, Trash2 } from "lucide-react";
 import { Fragment } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
+function formatDateFromString(value) {
+    const date = new Date(value);
+
+    let [year, month, dateOfMonth] = [
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+    ];
+
+    const monthStrings = [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
+    ];
+
+    return {
+        year,
+        month: monthStrings[month],
+        date: dateOfMonth
+    };
+}
+
 function formatRupiahFromString(value) {
     const isNegative = value.startsWith("-");
 
@@ -20,10 +51,25 @@ function formatRupiahFromString(value) {
 
 export default async function Journals({ journals }) {
     const rows = journals.map((journal, i) => {
-        const isFirstRow = journals.findIndex((j) => j.journals.id === journal.journals.id) === i;
-        const isLastRow = journals.findLastIndex((j) => j.journals.id === journal.journals.id) === i;
+        const shouldDisplayDate = journals.findIndex((j) => j.journals.id === journal.journals.id) === i;
+        const shouldDisplayDescription = journals.findLastIndex((j) => j.journals.id === journal.journals.id) === i;
 
-        return { ...journal, isFirstRow, isLastRow };
+        const shouldDisplayYearAndMonth = journals.findIndex((j) => {
+            const date = new Date(j.journals.date);
+            const [year, month] = [date.getFullYear(), date.getMonth()];
+
+            const compareDate = new Date(journal.journals.date);
+            const [compareYear, compareMonth] = [compareDate.getFullYear(), compareDate.getMonth()];
+
+            return year === compareYear && month === compareMonth;
+        }) === i;
+
+        return {
+            ...journal,
+            shouldDisplayDate,
+            shouldDisplayDescription,
+            shouldDisplayYearAndMonth
+        };
     });
 
     const totalDebit = rows.reduce((prev, curr) => new Decimal(prev).plus(new Decimal(curr.journal_lines.debit)), new Decimal("0")).toString();
@@ -34,7 +80,7 @@ export default async function Journals({ journals }) {
             <Table className="w-full">
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Tanggal</TableHead>
+                        <TableHead colSpan="2">Tanggal</TableHead>
                         <TableHead>Nomor</TableHead>
                         <TableHead>Deskripsi</TableHead>
                         <TableHead>Ref</TableHead>
@@ -47,14 +93,17 @@ export default async function Journals({ journals }) {
                     {rows.length > 0 && rows.map((row) => (
                         <Fragment key={row.journal_lines.id}>
                             <TableRow>
-                                <TableCell>{row.isFirstRow && row.journals.date}</TableCell>
-                                <TableCell>{row.isFirstRow && row.journals.number}</TableCell>
+                                <TableCell>{row.shouldDisplayYearAndMonth && (
+                                    `${formatDateFromString(row.journals.date).year} ${formatDateFromString(row.journals.date).month}`
+                                )}</TableCell>
+                                <TableCell hAlign="end">{row.shouldDisplayDate && formatDateFromString(row.journals.date).date}</TableCell>
+                                <TableCell>{row.shouldDisplayDate && row.journals.number}</TableCell>
                                 <TableCell className={row.journal_lines.credit !== "0" && "pl-16"}>{row.accounts.name}</TableCell>
                                 <TableCell>{row.accounts.code}</TableCell>
                                 <TableCell hAlign="end">{row.journal_lines.debit === "0" ? "-" : formatRupiahFromString(row.journal_lines.debit)}</TableCell>
                                 <TableCell hAlign="end">{row.journal_lines.credit === "0" ? "-" : formatRupiahFromString(row.journal_lines.credit)}</TableCell>
                                 <TableCell>
-                                    {row.isFirstRow && (
+                                    {row.shouldDisplayDate && (
                                         <>
                                             <SquarePen size={16} color="oklch(98.5% 0 0)" />
                                             <Trash2 size={16} color="oklch(63.7% 0.237 25.331)" />
@@ -62,7 +111,7 @@ export default async function Journals({ journals }) {
                                     )}
                                 </TableCell>
                             </TableRow>
-                            {(row.isLastRow && row.journals.description !== "") && (
+                            {(row.shouldDisplayDescription && row.journals.description !== "") && (
                                 <TableRow>
                                     <TableCell />
                                     <TableCell />
@@ -76,7 +125,7 @@ export default async function Journals({ journals }) {
                         </Fragment>
                     ))}
                     <TableRow>
-                        <TableCell>Jumlah</TableCell>
+                        <TableCell colSpan="2">Jumlah</TableCell>
                         <TableCell />
                         <TableCell />
                         <TableCell />
