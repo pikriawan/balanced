@@ -115,6 +115,7 @@ export default async function Journals({ journals }) {
                                 <TableRow>
                                     <TableCell />
                                     <TableCell />
+                                    <TableCell />
                                     <TableCell>({row.journals.description})</TableCell>
                                     <TableCell />
                                     <TableCell />
