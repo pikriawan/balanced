@@ -1,6 +1,7 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { accountsTable, companiesTable, journalLinesTable, journalsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
@@ -157,6 +158,6 @@ export async function createJournal(companyId, formData) {
             error: "Gagal membuat jurnal baru"
         };
     }
-
-    return { success: true };
+    
+    redirect(`/companies/${companyId}/journals`);
 }
