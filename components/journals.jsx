@@ -13,18 +13,18 @@ function formatDateFromString(value) {
     ];
 
     const monthStrings = [
-        "Januari",
-        "Februari",
-        "Maret",
-        "April",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
         "Mei",
-        "Juni",
-        "Juli",
-        "Agustus",
-        "September",
-        "Oktober",
-        "November",
-        "Desember"
+        "Jun",
+        "Jul",
+        "Agu",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Des"
     ];
 
     return {
