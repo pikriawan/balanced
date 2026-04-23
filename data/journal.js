@@ -14,7 +14,7 @@ export async function getJournals(companyId) {
         .select()
         .from(journalsTable)
         .where(eq(journalsTable.companyId, companyId))
-        .orderBy(journalsTable.date, journalLinesTable.id)
+        .orderBy(journalsTable.date, journalsTable.id, journalLinesTable.position)
         .leftJoin(journalLinesTable, eq(journalsTable.id, journalLinesTable.journalId))
         .leftJoin(accountsTable, eq(accountsTable.id, journalLinesTable.accountId));
 

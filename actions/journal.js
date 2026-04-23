@@ -146,8 +146,9 @@ export async function createJournal(companyId, formData) {
 
         await db
             .insert(journalLinesTable)
-            .values(journalLines.map((journalLine) => ({
+            .values(journalLines.map((journalLine, i) => ({
                 journalId: result[0].id,
+                position: i,
                 ...journalLine
             })));
     } catch {

@@ -43,5 +43,6 @@ export const journalLinesTable = pgTable("journal_lines", {
     journalId: t.integer("journal_id").notNull().references(() => journalsTable.id, { onDelete: "cascade" }),
     accountId: t.integer("account_id").notNull().references(() => accountsTable.id, { onDelete: "cascade" }),
     debit: t.numeric().notNull().default("0"),
-    credit: t.numeric().notNull().default("0")
+    credit: t.numeric().notNull().default("0"),
+    position: t.integer().notNull()
 });
