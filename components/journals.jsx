@@ -1,5 +1,6 @@
 import Decimal from "decimal.js";
 import { SquarePen, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { Fragment } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -49,7 +50,7 @@ function formatRupiahFromString(value) {
     return isNegative ? `(${formatted})` : formatted;
 }
 
-export default async function Journals({ journals }) {
+export default async function Journals({ companyId, journals }) {
     const rows = journals.map((journal, i) => {
         const shouldDisplayDate = journals.findIndex((j) => j.journals.id === journal.journals.id) === i;
         const shouldDisplayDescription = journals.findLastIndex((j) => j.journals.id === journal.journals.id) === i;
@@ -105,7 +106,9 @@ export default async function Journals({ journals }) {
                                 <TableCell>
                                     {row.shouldDisplayDate && (
                                         <>
-                                            <SquarePen size={16} color="oklch(98.5% 0 0)" />
+                                            <Link href={`/companies/${companyId}/journals/edit/${row.journals.id}`}>
+                                                <SquarePen size={16} color="oklch(98.5% 0 0)" />
+                                            </Link>
                                             <Trash2 size={16} color="oklch(63.7% 0.237 25.331)" />
                                         </>
                                     )}

@@ -16,7 +16,7 @@ export default async function JournalsPage({ params }) {
                 <Plus size={16} />
                 Buat jurnal baru
             </ButtonLink>
-            <Journals journals={journals} />
+            <Journals journals={journals} companyId={company.id} />
         </div>
     );
 }
