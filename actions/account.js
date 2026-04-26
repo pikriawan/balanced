@@ -119,7 +119,7 @@ export async function createAccount(companyId, formData) {
     };
 }
 
-export async function updateAccount(accountId, formData) {
+export async function editAccount(accountId, formData) {
     const session = await auth();
 
     if (!session?.user) {

@@ -1,6 +1,6 @@
 import { SquarePen, Trash2 } from "lucide-react";
 import AccountDeleteForm from "@/components/account-delete-form";
-import AccountUpdateForm from "@/components/account-update-form";
+import AccountEditForm from "@/components/account-edit-form";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -60,7 +60,7 @@ export default async function Accounts({ accounts }) {
                                         <SquarePen size={16} color="oklch(98.5% 0 0)" />
                                     </DialogTrigger>
                                     <DialogContent>
-                                        <AccountUpdateForm account={account} />
+                                        <AccountEditForm account={account} />
                                     </DialogContent>
                                 </Dialog>
                                 <Dialog>

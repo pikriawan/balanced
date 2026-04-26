@@ -69,7 +69,7 @@ export async function createCompany(formData) {
     };
 }
 
-export async function updateCompany(companyId, formData) {
+export async function editCompany(companyId, formData) {
     const session = await auth();
 
     if (!session?.user) {

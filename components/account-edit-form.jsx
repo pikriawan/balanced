@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useRef, useState } from "react";
-import { updateAccount } from "@/actions/account";
+import { editAccount } from "@/actions/account";
 import Button from "@/components/ui/button";
 import { DialogClose, DialogContext } from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -9,7 +9,7 @@ import Select from "@/components/ui/select";
 import Switch from "@/components/ui/switch";
 import TextField from "@/components/ui/text-field";
 
-export default function AccountUpdateForm({ account }) {
+export default function AccountEditForm({ account }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
     const [isAsset, setIsAsset] = useState(account.type === "asset");
@@ -24,7 +24,7 @@ export default function AccountUpdateForm({ account }) {
         setIsPending(true);
         setError(null);
 
-        const response = await updateAccount(account.id, formData);
+        const response = await editAccount(account.id, formData);
 
         setIsPending(false);
 
