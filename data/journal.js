@@ -21,6 +21,8 @@ export async function getJournals(companyId) {
     return result;
 }
 
+export async function getJournal(id) {}
+
 export async function getLastJournalNumber(companyId) {
     const session = await auth();
 
