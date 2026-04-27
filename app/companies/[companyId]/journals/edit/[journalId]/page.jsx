@@ -9,7 +9,7 @@ export default async function JournalEditPage({ params }) {
     const { companyId, journalId } = await params;
     const company = await getCompany(companyId);
     const accounts = await getAccounts(company.id);
-    const journal = await getJournal(journalId);
+    const journal = await getJournal(company.id, journalId);
 
     return (
         <div className="p-4 flex flex-col items-start gap-4">
