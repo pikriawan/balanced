@@ -62,6 +62,7 @@ export async function getJournal(companyId, journalId) {
         .select()
         .from(journalLinesTable)
         .where(eq(journalLinesTable.journalId, journal.id))
+        .orderBy(journalLinesTable.position)
         .leftJoin(accountsTable, eq(accountsTable.id, journalLinesTable.accountId));
 
     journal.journalLines = result;
