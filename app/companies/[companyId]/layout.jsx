@@ -6,8 +6,8 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { getCompany } from "@/data/company";
 
 export default async function CompanyLayout({ children, params }) {
-    const { id } = await params;
-    const company = await getCompany(id);
+    const { companyId } = await params;
+    const company = await getCompany(companyId);
 
     return (
         <div className="md:w-[calc(100%-20rem)] md:h-full md:fixed md:top-0 md:left-80 md:overflow-auto">

@@ -7,8 +7,8 @@ import { getAccountBalance, getAccounts } from "@/data/account";
 import { getCompany } from "@/data/company";
 
 export default async function AccountsPage({ params }) {
-    const { id } = await params;
-    const company = await getCompany(id);
+    const { companyId } = await params;
+    const company = await getCompany(companyId);
     const accounts = await getAccounts(company.id);
 
     for (let i = 0; i < accounts.length; i++) {

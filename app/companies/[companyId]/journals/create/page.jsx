@@ -6,15 +6,15 @@ import { getCompany } from "@/data/company";
 import { getLastJournalNumber } from "@/data/journal";
 
 export default async function JournalCreatePage({ params }) {
-    const { id } = await params;
-    const company = await getCompany(id);
+    const { companyId } = await params;
+    const company = await getCompany(companyId);
     const accounts = await getAccounts(company.id);
     const lastJournalNumber = await getLastJournalNumber(company.id);
 
     return (
         <div className="p-4 flex flex-col items-start gap-4">
             <div className="flex items-center gap-4">
-                <Link href={`/companies/${id}/journals`}>
+                <Link href={`/companies/${companyId}/journals`}>
                     <ChevronLeft size={16} />
                 </Link>
                 <h2 className="font-medium text-2xl">Buat Jurnal Baru</h2>
