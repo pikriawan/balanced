@@ -1,6 +1,7 @@
 "use server";
 
 import { and, eq, ne } from "drizzle-orm";
+import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { accountsTable, companiesTable, journalLinesTable, journalsTable } from "@/db/schema";
@@ -338,4 +339,67 @@ export async function editJournal(companyId, journalId, formData) {
     }
     
     redirect(`/companies/${companyId}/journals`);
+}
+
+export async function deleteJournal(journalId) {
+    const session = await auth();
+
+    if (!session?.user) {
+        return {
+            success: false,
+            error: "Tidak terautentikasi"
+        };
+    }
+
+    let result = await db
+        .select({ companyId: journalsTable.companyId })
+        .from(journalsTable)
+        .where(eq(journalsTable.id, journalId));
+
+    if (result.length === 0) {
+        return {
+            success: false,
+            error: "Jurnal tidak ditemukan"
+        };
+    }
+
+    const { companyId } = result[0];
+
+    result = await db
+        .select({ id: companiesTable.id })
+        .from(companiesTable)
+        .where(
+            and(
+                eq(companiesTable.id, companyId),
+                eq(companiesTable.userId, session.user.id)
+            )
+        );
+
+    if (result.length === 0) {
+        return {
+            success: false,
+            error: "Anda tidak memiliki akses untuk menghapus jurnal ini"
+        };
+    }
+
+    try {
+        await db
+            .delete(journalLinesTable)
+            .where(eq(journalLinesTable.journalId, journalId));
+
+        await db
+            .delete(journalsTable)
+            .where(eq(journalsTable.id, journalId));
+    } catch (error) {
+        return {
+            success: false,
+            error: "Gagal menghapus jurnal"
+        };
+    }
+
+    refresh();
+
+    return {
+        success: true
+    };
 }

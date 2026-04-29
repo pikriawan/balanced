@@ -2,6 +2,8 @@ import Decimal from "decimal.js";
 import { SquarePen, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
+import JournalDeleteForm from "@/components/journal-delete-form";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 function formatDateFromString(value) {
@@ -109,7 +111,14 @@ export default async function Journals({ companyId, journals }) {
                                             <Link href={`/companies/${companyId}/journals/edit/${row.journals.id}`}>
                                                 <SquarePen size={16} color="oklch(98.5% 0 0)" />
                                             </Link>
-                                            <Trash2 size={16} color="oklch(63.7% 0.237 25.331)" />
+                                            <Dialog>
+                                                <DialogTrigger>
+                                                    <Trash2 size={16} color="oklch(63.7% 0.237 25.331)" />
+                                                </DialogTrigger>
+                                                <DialogContent>
+                                                    <JournalDeleteForm journal={row.journals} />
+                                                </DialogContent>
+                                            </Dialog>
                                         </>
                                     )}
                                 </TableCell>
