@@ -2,6 +2,7 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { editJournal } from "@/actions/journal";
 import Button from "@/components/ui/button";
 import ButtonLink from "@/components/ui/button-link";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -30,8 +31,7 @@ export default function JournalEditForm({ companyId, accounts, journal }) {
         setIsPending(true);
         setError(null);
 
-        // const response = await createJournal(companyId, formData);
-        const response = { success: true };
+        const response = await editJournal(companyId, journal.id, formData);
 
         setIsPending(false);
 
