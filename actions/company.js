@@ -2,8 +2,9 @@
 
 import { and, eq, ne } from "drizzle-orm";
 import { refresh } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
-import { companiesTable } from "@/db/schema";
+import { companiesTable, journalsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
@@ -49,12 +50,13 @@ export async function createCompany(formData) {
     }
 
     try {
-        await db
+        result = await db
             .insert(companiesTable)
             .values({
                 userId: session.user.id,
                 ...validatedFields.data
-            });
+            })
+            .returning({ id: journalsTable.id });
     } catch (error) {
         return {
             success: false,
@@ -62,11 +64,7 @@ export async function createCompany(formData) {
         };
     }
 
-    refresh();
-
-    return {
-        success: true
-    };
+    redirect(`/companies/${result[0].id}/accounts`);
 }
 
 export async function editCompany(companyId, formData) {
