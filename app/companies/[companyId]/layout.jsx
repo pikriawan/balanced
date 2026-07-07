@@ -14,7 +14,7 @@ export default async function CompanyLayout({ children, params }) {
             <aside className="hidden md:block fixed w-xs h-full top-0 left-0 p-4 border-r border-neutral-800">
                 <CompanyNavigation company={company} />
             </aside>
-            <header className="sticky top-0 p-4 flex justify-between items-center gap-4 bg-neutral-950 border-b border-neutral-800">
+            <header className="sticky top-0 p-4 z-1 flex justify-between items-center gap-4 bg-neutral-950 border-b border-neutral-800">
                 <div className="flex items-center gap-4">
                     <Link href="/companies">
                         <ChevronLeft size={16} />
