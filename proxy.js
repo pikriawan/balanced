@@ -8,7 +8,7 @@ const guestRoutes = {
 
 const userRoutes = {
     exact: ["/companies", "/signout"],
-    start: ["/company"]
+    start: ["/companies"]
 };
 
 function matchRoute(pathname, routes) {
@@ -34,7 +34,7 @@ export const config = {
     matcher: [
         "/",
         "/companies",
-        "/company/:path*",
+        "/companies/:path*",
         "/signin",
         "/signout"
     ]
