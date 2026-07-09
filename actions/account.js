@@ -21,7 +21,21 @@ export async function createAccount(companyId, formData) {
         code: z.string().nonempty("Kode akun tidak boleh kosong"),
         type: z.enum(["asset", "liability", "equity", "revenue", "expense"], "Tipe akun tidak valid"),
         name: z.string().nonempty("Nama akun tidak boleh kosong"),
-        isCash: z.stringbool().optional()
+        isCash: z.stringbool().optional(),
+        isCapital: z.stringbool(),
+        isDrawing: z.stringbool()
+    }).superRefine(({ isCapital, isDrawing }, ctx) => {
+        if (isCapital && isDrawing) {
+            ctx.addIssue({
+                path: ["isCapital"],
+                message: "Akun tidak bisa sekaligus menjadi akun modal dan akun prive"
+            });
+
+            ctx.addIssue({
+                path: ["isDrawing"],
+                message: "Akun tidak bisa sekaligus menjadi akun modal dan akun prive"
+            });
+        }
     });
 
     const rawFormData = Object.fromEntries(formData);
@@ -133,7 +147,21 @@ export async function editAccount(accountId, formData) {
         code: z.string().nonempty("Kode akun tidak boleh kosong"),
         type: z.enum(["asset", "liability", "equity", "revenue", "expense"], "Tipe akun tidak valid"),
         name: z.string().nonempty("Nama akun tidak boleh kosong"),
-        isCash: z.stringbool().optional()
+        isCash: z.stringbool().optional(),
+        isCapital: z.stringbool(),
+        isDrawing: z.stringbool()
+    }).superRefine(({ isCapital, isDrawing }, ctx) => {
+        if (isCapital && isDrawing) {
+            ctx.addIssue({
+                path: ["isCapital"],
+                message: "Akun tidak bisa sekaligus menjadi akun modal dan akun prive"
+            });
+
+            ctx.addIssue({
+                path: ["isDrawing"],
+                message: "Akun tidak bisa sekaligus menjadi akun modal dan akun prive"
+            });
+        }
     });
 
     const rawFormData = Object.fromEntries(formData);

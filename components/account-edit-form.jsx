@@ -146,7 +146,7 @@ export default function AccountEditForm({ account }) {
                                 setIsDrawing(value);
                             }}
                         />
-                        {error?.isCash?.length > 0 && (
+                        {error?.isDrawing?.length > 0 && (
                             <Field>
                                 {error.isDrawing.map((e) => (
                                     <p className="text-red-500 text-sm" key={e}>{e}</p>
