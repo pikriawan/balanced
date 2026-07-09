@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { getAccountBalance, getAccounts } from "@/data/account";
 import { getCompany } from "@/data/company";
 
-export default async function AccountsPage({ params }) {
+export default async function AccountListPage({ params }) {
     const { companyId } = await params;
     const company = await getCompany(companyId);
     const accounts = await getAccounts(company.id);
@@ -18,7 +18,7 @@ export default async function AccountsPage({ params }) {
 
     return (
         <div className="p-4 flex flex-col items-start gap-4">
-            <h2 className="font-medium text-2xl">Akun</h2>
+            <h2 className="font-medium text-2xl">Daftar Akun</h2>
             <Dialog>
                 <DialogTrigger>
                     <Button>
