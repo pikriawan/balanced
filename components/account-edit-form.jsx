@@ -13,6 +13,9 @@ export default function AccountEditForm({ account }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
     const [isAsset, setIsAsset] = useState(account.type === "asset");
+    const [isEquity, setIsEquity] = useState(account.type === "equity");
+    const [isCapital, setIsCapital] = useState(account.isCapital);
+    const [isDrawing, setIsDrawing] = useState(account.isDrawing);
     const { isShow, setIsShow } = useContext(DialogContext);
     const autoFocusRef = useRef(null);
 
@@ -57,7 +60,15 @@ export default function AccountEditForm({ account }) {
             </Field>
             <Field>
                 <FieldLabel htmlFor={`updateAccount_type_${account.id}`}>Tipe akun</FieldLabel>
-                <Select id={`updateAccount_type_${account.id}`} name="type" onChange={(event) => setIsAsset(event.target.value === "asset")} defaultValue={account.type}>
+                <Select
+                    id={`updateAccount_type_${account.id}`}
+                    name="type"
+                    onChange={(event) => {
+                        setIsAsset(event.target.value === "asset");
+                        setIsEquity(event.target.value === "equity");
+                    }}
+                    defaultValue={account.type}
+                >
                     <option value="">Pilih tipe akun</option>
                     <option value="asset">Aset</option>
                     <option value="liability">Utang</option>
@@ -96,6 +107,54 @@ export default function AccountEditForm({ account }) {
                         </Field>
                     )}
                 </Field>
+            )}
+            {isEquity && (
+                <>
+                    <Field>
+                        <FieldLabel htmlFor="createAccount_isCapital">Termasuk akun modal?</FieldLabel>
+                        <Switch
+                            id="createAccount_isCapital"
+                            name="isCapital"
+                            isEnabled={isCapital}
+                            onChange={(value) => {
+                                if (isDrawing && value) {
+                                    setIsDrawing(false);
+                                }
+
+                                setIsCapital(value);
+                            }}
+                        />
+                        {error?.isCapital?.length > 0 && (
+                            <Field>
+                                {error.isCapital.map((e) => (
+                                    <p className="text-red-500 text-sm" key={e}>{e}</p>
+                                ))}
+                            </Field>
+                        )}
+                    </Field>
+                    <Field>
+                        <FieldLabel htmlFor="createAccount_isDrawing">Termasuk akun prive?</FieldLabel>
+                        <Switch
+                            id="createAccount_isDrawing"
+                            name="isDrawing"
+                            isEnabled={isDrawing}
+                            onChange={(value) => {
+                                if (isCapital && value) {
+                                    setIsCapital(false);
+                                }
+
+                                setIsDrawing(value);
+                            }}
+                        />
+                        {error?.isCash?.length > 0 && (
+                            <Field>
+                                {error.isDrawing.map((e) => (
+                                    <p className="text-red-500 text-sm" key={e}>{e}</p>
+                                ))}
+                            </Field>
+                        )}
+                    </Field>
+                </>
             )}
             {error && typeof error === "string" && (
                 <p className="text-red-500 text-sm" key={error}>{error}</p>
