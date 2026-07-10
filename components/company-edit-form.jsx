@@ -7,6 +7,23 @@ import { DialogClose, DialogContext } from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
 import TextField from "@/components/ui/text-field";
 
+function getMonthString(month) {
+    return [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
+    ][month - 1];
+}
+
 export default function CompanyEditForm({ company }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
@@ -51,6 +68,14 @@ export default function CompanyEditForm({ company }) {
                         ))}
                     </Field>
                 )}
+            </Field>
+            <Field>
+                <FieldLabel>Bulan awal pembukuan</FieldLabel>
+                <TextField defaultValue={getMonthString(company.firstMonth)} disabled />
+            </Field>
+            <Field>
+                <FieldLabel>Tahun awal pembukuan</FieldLabel>
+                <TextField defaultValue={company.firstYear} disabled />
             </Field>
             {error && typeof error === "string" && (
                 <p className="text-red-500 text-sm" key={error}>{error}</p>

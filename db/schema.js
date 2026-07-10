@@ -16,6 +16,8 @@ export const companiesTable = pgTable("companies", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
     userId: t.integer("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),
     name: t.varchar().notNull(),
+    firstMonth: t.integer("first_month").notNull(),
+    firstYear: t.integer("first_year").notNull()
 });
 
 export const accountsTable = pgTable("accounts", {

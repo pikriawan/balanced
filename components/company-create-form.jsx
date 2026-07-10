@@ -5,6 +5,7 @@ import { createCompany } from "@/actions/company";
 import Button from "@/components/ui/button";
 import { DialogClose, DialogContext } from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
+import Select from "@/components/ui/select";
 import TextField from "@/components/ui/text-field";
 
 export default function CompanyCreateForm() {
@@ -46,6 +47,47 @@ export default function CompanyCreateForm() {
                 {error?.name?.length > 0 && (
                     <Field>
                         {error.name.map((e) => (
+                            <p className="text-red-500 text-sm" key={e}>{e}</p>
+                        ))}
+                    </Field>
+                )}
+            </Field>
+            <Field>
+                <FieldLabel htmlFor="createCompany_firstMonth">Bulan mulai pembukuan</FieldLabel>
+                <Select id="createCompany_firstMonth" name="firstMonth" defaultValue={new Date().getMonth()}>
+                    <option value="">Pilih bulan mulai pembukuan</option>
+                    <option value="1">Januari</option>
+                    <option value="2">Februari</option>
+                    <option value="3">Maret</option>
+                    <option value="4">April</option>
+                    <option value="5">Mei</option>
+                    <option value="6">Juni</option>
+                    <option value="7">Juli</option>
+                    <option value="8">Agustus</option>
+                    <option value="9">September</option>
+                    <option value="10">Oktober</option>
+                    <option value="11">November</option>
+                    <option value="12">Desember</option>
+                </Select>
+                {error?.firstMonth?.length > 0 && (
+                    <Field>
+                        {error.firstMonth.map((e) => (
+                            <p className="text-red-500 text-sm" key={e}>{e}</p>
+                        ))}
+                    </Field>
+                )}
+            </Field>
+            <Field>
+                <FieldLabel htmlFor="createCompany_firstYear">Tahun mulai pembukuan</FieldLabel>
+                <Select id="createCompany_firstYear" name="firstYear" defaultValue={new Date().getFullYear()}>
+                    <option value="">Pilih tahun mulai pembukuan</option>
+                    {new Array(2100 - 1899).fill(null).map((_, i) => (
+                        <option value={`${i + 1900}`} key={i}>{i + 1900}</option>
+                    ))}
+                </Select>
+                {error?.firstYear?.length > 0 && (
+                    <Field>
+                        {error.firstYear.map((e) => (
                             <p className="text-red-500 text-sm" key={e}>{e}</p>
                         ))}
                     </Field>

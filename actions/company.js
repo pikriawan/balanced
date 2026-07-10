@@ -19,7 +19,9 @@ export async function createCompany(formData) {
     }
 
     const schema = z.object({
-        name: z.string().nonempty("Nama perusahaan tidak boleh kosong")
+        name: z.string().nonempty("Nama perusahaan tidak boleh kosong"),
+        firstMonth: z.coerce.number().min(1, "Bulan awal pembukuan tidak boleh kosong").max(12, "Bulan awal pembukuan tidak boleh kosong"),
+        firstYear: z.coerce.number().min(1900, "Tahun awal pembukuan tidak boleh kosong").max(2100, "Tahun awal pembukuan tidak boleh kosong")
     });
 
     const rawFormData = Object.fromEntries(formData);
@@ -78,7 +80,9 @@ export async function editCompany(companyId, formData) {
     }
 
     const schema = z.object({
-        name: z.string().nonempty("Nama perusahaan tidak boleh kosong")
+        name: z.string().nonempty("Nama perusahaan tidak boleh kosong"),
+        first_month: z.int().min(1).max(12),
+        first_year: z.int().min(1900).max(2100)
     });
 
     const rawFormData = Object.fromEntries(formData);
