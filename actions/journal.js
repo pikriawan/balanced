@@ -36,7 +36,11 @@ export async function createJournal(companyId, formData) {
     }
 
     let result = await db
-        .select({ id: companiesTable.id })
+        .select({
+            id: companiesTable.id,
+            firstMonth: companiesTable.firstMonth,
+            firstYear: companiesTable.firstYear
+        })
         .from(companiesTable)
         .where(
             and(
@@ -49,6 +53,30 @@ export async function createJournal(companyId, formData) {
         return {
             success: false,
             error: "Perusahaan tidak ditemukan"
+        };
+    }
+
+    const journalDate = new Date(validatedFields.data.date);
+
+    console.log("Jurnal");
+    console.log(journalDate.getFullYear());
+    console.log(journalDate.getMonth());
+
+    console.log("Pembukuan");
+    console.log(result[0].firstYear);
+    console.log(result[0].firstMonth);
+
+    if (
+        journalDate.getFullYear() < result[0].firstYear ||
+        (journalDate.getFullYear() === result[0].firstYear && journalDate.getMonth() + 1 < result[0].firstMonth)
+    ) {
+        return {
+            success: false,
+            error: "Tanggal jurnal harus setelah tanggal pembukuan awal perusahaan (1/" +
+                result[0].firstMonth +
+                "/" +
+                result[0].firstYear +
+                ")"
         };
     }
 
