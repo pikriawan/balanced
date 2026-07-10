@@ -22,8 +22,8 @@ export async function createAccount(companyId, formData) {
         type: z.enum(["asset", "liability", "equity", "revenue", "expense"], "Tipe akun tidak valid"),
         name: z.string().nonempty("Nama akun tidak boleh kosong"),
         isCash: z.stringbool().optional(),
-        isCapital: z.stringbool(),
-        isDrawing: z.stringbool()
+        isCapital: z.stringbool().optional(),
+        isDrawing: z.stringbool().optional()
     }).superRefine(({ isCapital, isDrawing }, ctx) => {
         if (isCapital && isDrawing) {
             ctx.addIssue({
@@ -148,8 +148,8 @@ export async function editAccount(accountId, formData) {
         type: z.enum(["asset", "liability", "equity", "revenue", "expense"], "Tipe akun tidak valid"),
         name: z.string().nonempty("Nama akun tidak boleh kosong"),
         isCash: z.stringbool().optional(),
-        isCapital: z.stringbool(),
-        isDrawing: z.stringbool()
+        isCapital: z.stringbool().optional(),
+        isDrawing: z.stringbool().optional()
     }).superRefine(({ isCapital, isDrawing }, ctx) => {
         if (isCapital && isDrawing) {
             ctx.addIssue({
