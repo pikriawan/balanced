@@ -1,19 +1,29 @@
-import { and, desc, eq, like } from "drizzle-orm";
+import { and, desc, eq, gte, like, lt } from "drizzle-orm";
 import { accountsTable, companiesTable, journalLinesTable, journalsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
-export async function getJournals(companyId) {
+export async function getJournals(companyId, start_date, end_date) {
     const session = await auth();
 
     if (!session?.user) {
         return null;
     }
 
+    if (new Date(start_date).toString() === "Invalid Date" || new Date(end_date).toString() === "Invalid Date") {
+        return [];
+    }
+
     let result = await db
         .select()
         .from(journalsTable)
-        .where(eq(journalsTable.companyId, companyId))
+        .where(
+            and(
+                eq(journalsTable.companyId, companyId),
+                gte(journalsTable.date, new Date(start_date)),
+                lt(journalsTable.date, new Date(end_date))
+            )
+        )
         .orderBy(journalsTable.date, journalsTable.id, journalLinesTable.position)
         .leftJoin(journalLinesTable, eq(journalsTable.id, journalLinesTable.journalId))
         .leftJoin(accountsTable, eq(accountsTable.id, journalLinesTable.accountId));

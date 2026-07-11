@@ -58,14 +58,6 @@ export async function createJournal(companyId, formData) {
 
     const journalDate = new Date(validatedFields.data.date);
 
-    console.log("Jurnal");
-    console.log(journalDate.getFullYear());
-    console.log(journalDate.getMonth());
-
-    console.log("Pembukuan");
-    console.log(result[0].firstYear);
-    console.log(result[0].firstMonth);
-
     if (
         journalDate.getFullYear() < result[0].firstYear ||
         (journalDate.getFullYear() === result[0].firstYear && journalDate.getMonth() + 1 < result[0].firstMonth)
