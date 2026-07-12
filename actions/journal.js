@@ -8,7 +8,7 @@ import { accountsTable, companiesTable, journalLinesTable, journalsTable } from 
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
-export async function createJournal(companyId, formData) {
+export async function createGeneralJournal(companyId, formData) {
     const session = await auth();
     
     if (!session?.user) {
@@ -180,10 +180,10 @@ export async function createJournal(companyId, formData) {
         };
     }
     
-    redirect(`/companies/${companyId}/journals`);
+    redirect(`/companies/${companyId}/journals/general`);
 }
 
-export async function editJournal(companyId, journalId, formData) {
+export async function editGeneralJournal(companyId, journalId, formData) {
     const session = await auth();
     
     if (!session?.user) {
@@ -358,10 +358,10 @@ export async function editJournal(companyId, journalId, formData) {
         };
     }
     
-    redirect(`/companies/${companyId}/journals`);
+    redirect(`/companies/${companyId}/journals/general`);
 }
 
-export async function deleteJournal(journalId) {
+export async function deleteGeneralJournal(journalId) {
     const session = await auth();
 
     if (!session?.user) {

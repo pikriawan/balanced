@@ -14,7 +14,7 @@ export default async function JournalEditPage({ params }) {
     return (
         <div className="p-4 flex flex-col items-start gap-4">
             <div className="flex items-center gap-4">
-                <Link href={`/companies/${companyId}/journals`}>
+                <Link href={`/companies/${companyId}/journals/general`}>
                     <ChevronLeft size={16} />
                 </Link>
                 <h2 className="font-medium text-2xl">Edit Jurnal</h2>

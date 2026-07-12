@@ -108,7 +108,7 @@ export default async function Journals({ companyId, journals }) {
                                 <TableCell>
                                     {row.shouldDisplayDate && (
                                         <>
-                                            <Link href={`/companies/${companyId}/journals/edit/${row.journals.id}`}>
+                                            <Link href={`/companies/${companyId}/journals/general/edit/${row.journals.id}`}>
                                                 <SquarePen size={16} color="oklch(98.5% 0 0)" />
                                             </Link>
                                             <Dialog>

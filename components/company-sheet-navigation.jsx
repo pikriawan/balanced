@@ -60,7 +60,10 @@ export default function CompanySheetNavigation({ className, company, ...props })
     return (
         <nav className={cn("flex flex-col", className)} {...props}>
             <NavigationLink pathname={pathname} href={`/companies/${company.id}/accounts`}>Akun</NavigationLink>
-            <NavigationLink pathname={pathname} href={`/companies/${company.id}/journals`}>Jurnal</NavigationLink>
+            <NavigationGroup name="Jurnal" pathname={pathname} startPathname={`/companies/${company.id}/journals`}>
+                <NavigationLink pathname={pathname} href={`/companies/${company.id}/journals/opening`}>Pembukaan</NavigationLink>
+                <NavigationLink pathname={pathname} href={`/companies/${company.id}/journals/general`}>Umum</NavigationLink>
+            </NavigationGroup>
             <NavigationLink pathname={pathname} href={`/companies/${company.id}/ledger`}>Buku Besar</NavigationLink>
             <NavigationGroup name="Laporan" pathname={pathname} startPathname={`/companies/${company.id}/reports`}>
                 <NavigationLink pathname={pathname} href={`/companies/${company.id}/reports/income-statement`}>Laba Rugi</NavigationLink>
