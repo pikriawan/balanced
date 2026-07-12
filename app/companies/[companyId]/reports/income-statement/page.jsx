@@ -1,3 +1,4 @@
+import DateFilter from "@/components/date-filter";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getIncomeStatement } from "@/data/report";
 
@@ -16,13 +17,15 @@ function formatRupiahFromString(value) {
     return isNegative ? `(${formatted})` : formatted;
 }
 
-export default async function IncomeStatementPage({ params }) {
+export default async function IncomeStatementPage({ params, searchParams }) {
     const { companyId } = await params;
-    const incomeStatement = await getIncomeStatement(companyId);
+    const { start_date = "", end_date = "" } = await searchParams;
+    const incomeStatement = await getIncomeStatement(companyId, start_date, end_date);
 
     return (
         <div className="p-4 flex flex-col items-start gap-4">
             <h2 className="font-medium text-2xl">Laporan Laba Rugi</h2>
+            <DateFilter />
             <div className="w-full flex flex-col gap-4">
                 <div className="w-full relative overflow-x-auto bg-neutral-950 rounded-lg border border-neutral-800">
                     <Table className="w-full">

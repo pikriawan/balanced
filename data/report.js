@@ -1,14 +1,24 @@
 import Decimal from "decimal.js";
-import { and, eq, or } from "drizzle-orm";
-import { accountsTable, journalLinesTable } from "@/db/schema";
+import { and, eq, gte, lt, or } from "drizzle-orm";
+import { accountsTable, journalLinesTable, journalsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
-export async function getIncomeStatement(companyId) {
+export async function getIncomeStatement(companyId, start_date, end_date) {
     const session = await auth();
 
     if (!session?.user) {
         return null;
+    }
+
+    if (new Date(start_date).toString() === "Invalid Date" || new Date(end_date).toString() === "Invalid Date") {
+        return {
+            revenues: [],
+            expenses: [],
+            revenue: "0",
+            expense: "0",
+            income: "0"
+        };
     }
 
     let result = await db
@@ -20,10 +30,13 @@ export async function getIncomeStatement(companyId) {
                 or(
                     eq(accountsTable.type, "revenue"),
                     eq(accountsTable.type, "expense")
-                )
+                ),
+                gte(journalsTable.date, new Date(start_date)),
+                lt(journalsTable.date, new Date(end_date))
             )
         )
         .leftJoin(journalLinesTable, eq(journalLinesTable.accountId, accountsTable.id))
+        .leftJoin(journalsTable, eq(journalLinesTable.journalId, journalsTable.id))
         .orderBy(accountsTable.code);
 
     const accounts = [];
