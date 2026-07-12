@@ -1,20 +1,24 @@
 import Decimal from "decimal.js";
-import { eq } from "drizzle-orm";
+import { and, eq, gte, lt } from "drizzle-orm";
 import { accountsTable, journalLinesTable, journalsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
-export async function getLedger(companyId) {
+export async function getLedger(companyId, start_date, end_date) {
     const session = await auth();
 
     if (!session?.user) {
         return null;
     }
 
+    if (new Date(start_date).toString() === "Invalid Date" || new Date(end_date).toString() === "Invalid Date") {
+        return [];
+    }
+
     let result = await db
         .select()
         .from(accountsTable)
-        .where(eq(accountsTable.companyId, companyId))
+        .where(and(eq(accountsTable.companyId, companyId), gte(journalsTable.date, new Date(start_date)), lt(journalsTable.date, new Date(end_date))))
         .leftJoin(journalLinesTable, eq(accountsTable.id, journalLinesTable.accountId))
         .leftJoin(journalsTable, eq(journalLinesTable.journalId, journalsTable.id))
         .orderBy(accountsTable.code, journalsTable.date, journalsTable.id, journalLinesTable.position);
