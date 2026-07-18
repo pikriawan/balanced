@@ -1,7 +1,46 @@
+import Decimal from "decimal.js";
 import { and, desc, eq, gte, like, lt } from "drizzle-orm";
 import { accountsTable, companiesTable, journalLinesTable, journalsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
+
+export async function getOpeningJournals(companyId) {
+    const session = await auth();
+
+    if (!session?.user) {
+        return null;
+    }
+
+    const result = await db
+        .select()
+        .from(accountsTable)
+        .where(eq(accountsTable.companyId, companyId))
+        .orderBy(accountsTable.code);
+
+    for (let i = 0; i < result.length; i++) {
+        const rows = await db
+            .select()
+            .from(journalLinesTable)
+            .innerJoin(journalsTable, eq(journalLinesTable.journalId, journalsTable.id))
+            .where(
+                and(
+                    eq(journalLinesTable.accountId, result[i].id),
+                    eq(journalsTable.type, "opening")
+                )
+            );
+
+        let balance = new Decimal("0");
+
+        for (const row of rows) {
+            balance = balance.plus(new Decimal(row.journal_lines.debit));
+            balance = balance.minus(new Decimal(row.journal_lines.credit));
+        }
+
+        result[i].balance = balance.toString();
+    }
+
+    return result;
+}
 
 export async function getGeneralJournals(companyId, start_date, end_date) {
     const session = await auth();
