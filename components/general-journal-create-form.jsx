@@ -196,7 +196,7 @@ export default function GeneralJournalCreateForm({ companyId, accounts, lastJour
                 <p className="text-red-500 text-sm" key={error}>{error}</p>
             )}
             <div className="grid grid-cols-2 gap-4">
-                <ButtonLink className="w-full justify-center" href={`/companies/${companyId}/journals`} variant="outlined" disabled={isPending}>
+                <ButtonLink className="w-full justify-center" href={`/companies/${companyId}/journals/general`} variant="outlined" disabled={isPending}>
                     <span className="truncate">
                         Batal
                     </span>
