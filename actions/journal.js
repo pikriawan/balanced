@@ -73,8 +73,6 @@ export async function editOpeningJournal(companyId, formData) {
             )
         );
 
-    console.log(company[0]);
-
     if (company.length === 0) {
         return {
             success: false,
@@ -116,9 +114,7 @@ export async function editOpeningJournal(companyId, formData) {
                 position: i,
                 ...account
             })));
-    } catch (error) {
-        console.log(error);
-
+    } catch {
         return {
             success: false,
             error: "Gagal mengedit saldo awal akun"

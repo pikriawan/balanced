@@ -77,7 +77,6 @@ export default async function GeneralJournals({ companyId, journals }) {
 
     const totalDebit = rows.reduce((prev, curr) => new Decimal(prev).plus(new Decimal(curr.journal_lines.debit)), new Decimal("0")).toString();
     const totalCredit = rows.reduce((prev, curr) => new Decimal(prev).plus(new Decimal(curr.journal_lines.credit)), new Decimal("0")).toString();
-    console.log(rows);
 
     return (
         <div className="w-full relative overflow-x-auto bg-neutral-950 rounded-lg border border-neutral-800">
