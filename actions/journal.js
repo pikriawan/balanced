@@ -9,6 +9,125 @@ import { accountsTable, companiesTable, journalLinesTable, journalsTable } from 
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
+export async function editOpeningJournal(companyId, formData) {
+    const session = await auth();
+
+    if (!session?.user) {
+        return {
+            success: false,
+            error: "Tidak terautentikasi"
+        };
+    }
+
+    const schema = z.object({
+        accounts: z.string()
+    });
+
+    const rawFormData = Object.fromEntries(formData);
+    const validatedFields = schema.safeParse(rawFormData);
+
+    if (!validatedFields.success) {
+        return {
+            success: false,
+            error: z.flattenError(validatedFields.error).fieldErrors
+        };
+    }
+
+    let accounts;
+
+    try {
+        accounts = JSON.parse(validatedFields.data.accounts);
+    } catch {
+        return {
+            success: false,
+            error: "Data tidak valid"
+        };
+    }
+
+    let balance = new Decimal("0");
+
+    for (const account of accounts) {
+        balance = balance
+            .plus(new Decimal(account.debit))
+            .minus(new Decimal(account.credit));
+    }
+
+    if (!balance.isZero()) {
+        return {
+            success: false,
+            error: "Jumlah sisa harus nol"
+        };
+    }
+
+    const company = await db
+        .select({
+            id: companiesTable.id,
+            firstMonth: companiesTable.firstMonth,
+            firstYear: companiesTable.firstYear
+        })
+        .from(companiesTable)
+        .where(
+            and(
+                eq(companiesTable.id, companyId),
+                eq(companiesTable.userId, session.user.id)
+            )
+        );
+
+    console.log(company[0]);
+
+    if (company.length === 0) {
+        return {
+            success: false,
+            error: "Perusahaan tidak ditemukan"
+        };
+    }
+
+    try {
+        const openingJournal = await db
+            .select({ id: journalsTable.id })
+            .from(journalsTable)
+            .where(
+                and(
+                    eq(journalsTable.companyId, companyId),
+                    eq(journalsTable.type, "opening")
+                )
+            );
+
+        if (openingJournal.length > 0) {
+            await db
+                .delete(journalsTable)
+                .where(eq(journalsTable.id, openingJournal[0].id));
+        }
+
+        let result = await db
+            .insert(journalsTable)
+            .values({
+                companyId,
+                type: "opening",
+                date: `${company[0].firstYear}-${company[0].firstMonth}-1`,
+                number: "JPB00001"
+            })
+            .returning({ id: journalsTable.id });
+
+        await db
+            .insert(journalLinesTable)
+            .values(accounts.map((account, i) => ({
+                journalId: result[0].id,
+                position: i,
+                ...account
+            })));
+    } catch (error) {
+        console.log(error);
+
+        return {
+            success: false,
+            error: "Gagal mengedit saldo awal akun"
+        };
+    }
+
+    redirect(`/companies/${companyId}/journals/opening`);
+}
+
 export async function createGeneralJournal(companyId, formData) {
     const session = await auth();
     
@@ -113,7 +232,7 @@ export async function createGeneralJournal(companyId, formData) {
         };
     }
 
-    for await (const journalLine of journalLines) {
+    for (const journalLine of journalLines) {
         let result = await db
             .select({ id: accountsTable.id })
             .from(accountsTable)
@@ -287,7 +406,7 @@ export async function editGeneralJournal(companyId, journalId, formData) {
         };
     }
 
-    for await (const journalLine of journalLines) {
+    for (const journalLine of journalLines) {
         let result = await db
             .select({ id: accountsTable.id })
             .from(accountsTable)

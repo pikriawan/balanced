@@ -2,6 +2,7 @@
 
 import Decimal from "decimal.js";
 import { useState } from "react";
+import { editOpeningJournal } from "@/actions/journal";
 import Button from "@/components/ui/button";
 import ButtonLink from "@/components/ui/button-link";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -39,6 +40,8 @@ function formatRupiahFromString(value) {
 
 export default function OpeningJournalEditForm({ companyId, accounts: initialAccounts }) {
     const [accounts, setAccounts] = useState(initialAccounts);
+    const [isPending, setIsPending] = useState(false);
+    const [error, setError] = useState(null);
 
     function calculatRemainingBalance(accounts) {
         let result = new Decimal("0");
@@ -50,8 +53,37 @@ export default function OpeningJournalEditForm({ companyId, accounts: initialAcc
         return result.toString();
     }
 
+    async function onSubmit(event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+
+        const accountsString = JSON.stringify(accounts.map((account) => {
+            const balance = new Decimal(account.balance || "0");
+
+            return {
+                accountId: account.id,
+                debit: balance.isPositive() ? balance.toString() : "0",
+                credit: balance.isNegative() ? balance.abs().toString() : "0"
+            };
+        }));
+
+        formData.append("accounts", accountsString);
+
+        setIsPending(true);
+        setError(null);
+
+        const response = await editOpeningJournal(companyId, formData);
+
+        setIsPending(false);
+
+        if (!response.success) {
+            setError(response.error);
+        }
+    }
+
     return (
-        <form className="w-full flex flex-col items-start gap-4">
+        <form className="w-full flex flex-col items-start gap-4" onSubmit={onSubmit}>
             <div className="w-full relative overflow-x-auto bg-neutral-950 rounded-lg border border-neutral-800">
                 <Table className="w-full">
                     <TableHeader>
@@ -97,13 +129,16 @@ export default function OpeningJournalEditForm({ companyId, accounts: initialAcc
                     </TableBody>
                 </Table>
             </div>
+            {error && typeof error === "string" && (
+                <p className="text-red-500 text-sm" key={error}>{error}</p>
+            )}
             <div className="grid grid-cols-2 gap-4">
-                <ButtonLink className="w-full justify-center" href={`/companies/${companyId}/journals/opening`} variant="outlined">
+                <ButtonLink className="w-full justify-center" href={`/companies/${companyId}/journals/opening`} variant="outlined" disabled={isPending}>
                     <span className="truncate">
                         Batal
                     </span>
                 </ButtonLink>
-                <Button className="w-full justify-center truncate">
+                <Button className="w-full justify-center truncate" disabled={isPending}>
                     <span className="truncate">
                         Simpan
                     </span>
