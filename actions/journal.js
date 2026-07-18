@@ -1,5 +1,6 @@
 "use server";
 
+import Decimal from "decimal.js";
 import { and, eq, ne } from "drizzle-orm";
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
@@ -140,15 +141,15 @@ export async function createGeneralJournal(companyId, formData) {
         }
     }
 
-    let totalDebit = 0;
-    let totalCredit = 0;
+    let balance = new Decimal("0");
 
     for (const journalLine of journalLines) {
-        totalDebit += journalLine.debit;
-        totalCredit += journalLine.credit;
+        balance = balance
+            .plus(new Decimal(journalLine.debit.toString()))
+            .minus(new Decimal(journalLine.credit.toString()));
     }
 
-    if (totalDebit !== totalCredit) {
+    if (!balance.isZero()) {
         return {
             success: false,
             error: "Jumlah debit dan kredit harus seimbang"
@@ -314,15 +315,15 @@ export async function editGeneralJournal(companyId, journalId, formData) {
         }
     }
 
-    let totalDebit = 0;
-    let totalCredit = 0;
+    let balance = new Decimal("0");
 
     for (const journalLine of journalLines) {
-        totalDebit += journalLine.debit;
-        totalCredit += journalLine.credit;
+        balance = balance
+            .plus(new Decimal(journalLine.debit.toString()))
+            .minus(new Decimal(journalLine.credit.toString()));
     }
 
-    if (totalDebit !== totalCredit) {
+    if (!balance.isZero()) {
         return {
             success: false,
             error: "Jumlah debit dan kredit harus seimbang"
