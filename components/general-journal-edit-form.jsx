@@ -2,7 +2,7 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { createGeneralJournal } from "@/actions/journal";
+import { editGeneralJournal } from "@/actions/journal";
 import Button from "@/components/ui/button";
 import ButtonLink from "@/components/ui/button-link";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -10,21 +10,13 @@ import Select from "@/components/ui/select";
 import TextArea from "@/components/ui/text-area";
 import TextField from "@/components/ui/text-field";
 
-export default function JournalCreateForm({ companyId, accounts, lastJournalNumber }) {
-    const [journalLines, setJournalLines] = useState([
-        {
-            id: 0,
-            accountId: "",
-            debit: "",
-            credit: ""
-        },
-        {
-            id: 1,
-            accountId: "",
-            debit: "",
-            credit: ""
-        }
-    ]);
+export default function GeneralJournalEditForm({ companyId, accounts, journal }) {
+    const [journalLines, setJournalLines] = useState(journal.journalLines.map((j, i) => ({
+        id: i,
+        accountId: j.accounts.id,
+        debit: j.journal_lines.debit,
+        credit: j.journal_lines.credit
+    })));
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
     const autoFocusRef = useRef(null);
@@ -39,7 +31,7 @@ export default function JournalCreateForm({ companyId, accounts, lastJournalNumb
         setIsPending(true);
         setError(null);
 
-        const response = await createGeneralJournal(companyId, formData);
+        const response = await editGeneralJournal(companyId, journal.id, formData);
 
         setIsPending(false);
 
@@ -59,7 +51,7 @@ export default function JournalCreateForm({ companyId, accounts, lastJournalNumb
         <form className="w-full flex flex-col items-start gap-4" onSubmit={onSubmit}>
             <Field className="w-full">
                 <FieldLabel htmlFor="journalCreate_date">Tanggal</FieldLabel>
-                <TextField className="w-full max-w-3xs" id="journalCreate_date" name="date" type="date" ref={autoFocusRef} />
+                <TextField className="w-full max-w-3xs" id="journalCreate_date" name="date" type="date" ref={autoFocusRef} defaultValue={journal.date} />
                 {error?.date?.length > 0 && (
                     <Field>
                         {error.date.map((e) => (
@@ -70,7 +62,7 @@ export default function JournalCreateForm({ companyId, accounts, lastJournalNumb
             </Field>
             <Field className="w-full">
                 <FieldLabel htmlFor="journalCreate_number">Nomor jurnal</FieldLabel>
-                <TextField className="w-full max-w-3xs" id="journalCreate_number" name="number" placeholder="JU00001" defaultValue={lastJournalNumber} />
+                <TextField className="w-full max-w-3xs" id="journalCreate_number" name="number" placeholder="JU00001" defaultValue={journal.number} />
                 {error?.number?.length > 0 && (
                     <Field>
                         {error.number.map((e) => (
@@ -81,7 +73,7 @@ export default function JournalCreateForm({ companyId, accounts, lastJournalNumb
             </Field>
             <Field className="w-full">
                 <FieldLabel htmlFor="journalCreate_description">Keterangan</FieldLabel>
-                <TextArea className="w-full max-w-3xs" id="journalCreate_description" name="description" placeholder="Keterangan" />
+                <TextArea className="w-full max-w-3xs" id="journalCreate_description" name="description" placeholder="Keterangan" defaultValue={journal.description} />
                 {error?.description?.length > 0 && (
                     <Field>
                         {error.description.map((e) => (

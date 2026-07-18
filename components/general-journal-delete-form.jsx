@@ -5,7 +5,7 @@ import { deleteGeneralJournal } from "@/actions/journal";
 import Button from "@/components/ui/button";
 import { DialogClose, DialogContext } from "@/components/ui/dialog";
 
-export default function JournalDeleteForm({ journal }) {
+export default function GeneralJournalDeleteForm({ journal }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
     const { setIsShow } = useContext(DialogContext);

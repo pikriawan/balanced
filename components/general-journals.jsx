@@ -2,7 +2,7 @@ import Decimal from "decimal.js";
 import { SquarePen, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
-import JournalDeleteForm from "@/components/journal-delete-form";
+import GeneralJournalDeleteForm from "@/components/general-journal-delete-form";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -52,7 +52,7 @@ function formatRupiahFromString(value) {
     return isNegative ? `(${formatted})` : formatted;
 }
 
-export default async function Journals({ companyId, journals }) {
+export default async function GeneralJournals({ companyId, journals }) {
     const rows = journals.map((journal, i) => {
         const shouldDisplayDate = journals.findIndex((j) => j.journals.id === journal.journals.id) === i;
         const shouldDisplayDescription = journals.findLastIndex((j) => j.journals.id === journal.journals.id) === i;
@@ -116,7 +116,7 @@ export default async function Journals({ companyId, journals }) {
                                                     <Trash2 size={16} color="oklch(63.7% 0.237 25.331)" />
                                                 </DialogTrigger>
                                                 <DialogContent>
-                                                    <JournalDeleteForm journal={row.journals} />
+                                                    <GeneralJournalDeleteForm journal={row.journals} />
                                                 </DialogContent>
                                             </Dialog>
                                         </>

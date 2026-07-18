@@ -1,11 +1,11 @@
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import JournalCreateForm from "@/components/journal-create-form";
+import GeneralJournalCreateForm from "@/components/general-journal-create-form";
 import { getAccounts } from "@/data/account";
 import { getCompany } from "@/data/company";
 import { getLastGeneralJournalNumber } from "@/data/journal";
 
-export default async function JournalCreatePage({ params }) {
+export default async function GeneralJournalCreatePage({ params }) {
     const { companyId } = await params;
     const company = await getCompany(companyId);
     const accounts = await getAccounts(company.id);
@@ -19,7 +19,7 @@ export default async function JournalCreatePage({ params }) {
                 </Link>
                 <h2 className="font-medium text-2xl">Buat Jurnal Baru</h2>
             </div>
-            <JournalCreateForm companyId={company.id} accounts={accounts} lastJournalNumber={lastJournalNumber} />
+            <GeneralJournalCreateForm companyId={company.id} accounts={accounts} lastJournalNumber={lastJournalNumber} />
         </div>
     );
 }
