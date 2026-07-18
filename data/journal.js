@@ -3,7 +3,7 @@ import { accountsTable, companiesTable, journalLinesTable, journalsTable } from 
 import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 
-export async function getJournals(companyId, start_date, end_date) {
+export async function getGeneralJournals(companyId, start_date, end_date) {
     const session = await auth();
 
     if (!session?.user) {
@@ -20,6 +20,7 @@ export async function getJournals(companyId, start_date, end_date) {
         .where(
             and(
                 eq(journalsTable.companyId, companyId),
+                eq(journalsTable.type, "general"),
                 gte(journalsTable.date, new Date(start_date)),
                 lt(journalsTable.date, new Date(end_date))
             )
@@ -31,7 +32,7 @@ export async function getJournals(companyId, start_date, end_date) {
     return result;
 }
 
-export async function getJournal(companyId, journalId) {
+export async function getGeneralJournal(companyId, journalId) {
     const session = await auth();
 
     if (!session?.user) {
@@ -58,7 +59,8 @@ export async function getJournal(companyId, journalId) {
         .where(
             and(
                 eq(journalsTable.id, journalId),
-                eq(journalsTable.companyId, companyId)
+                eq(journalsTable.companyId, companyId),
+                eq(journalsTable.type, "general")
             )
         );
 
@@ -80,7 +82,7 @@ export async function getJournal(companyId, journalId) {
     return journal;
 }
 
-export async function getLastJournalNumber(companyId) {
+export async function getLastGeneralJournalNumber(companyId) {
     const session = await auth();
 
     if (!session?.user) {
@@ -95,9 +97,11 @@ export async function getLastJournalNumber(companyId) {
         .from(journalsTable)
         .where(
             and(
-                eq(journalsTable.companyId, companyId)),
-                like(journalsTable.number, `${prefix}%`)
-            )
+                eq(journalsTable.companyId, companyId),
+                eq(journalsTable.type, "general")
+            ),
+            like(journalsTable.number, `${prefix}%`)
+        )
         .orderBy(desc(journalsTable.number))
         .limit(1);
 

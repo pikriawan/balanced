@@ -160,6 +160,7 @@ export async function createGeneralJournal(companyId, formData) {
             .insert(journalsTable)
             .values({
                 companyId,
+                type: "general",
                 date: validatedFields.data.date,
                 number: validatedFields.data.number,
                 description: validatedFields.data.description

@@ -3,6 +3,8 @@ import * as t from "drizzle-orm/pg-core";
 
 export const accountTypesEnum = pgEnum("account_types", ["asset", "liability", "equity", "revenue", "expense"]);
 
+export const journalTypesEnum = pgEnum("journal_types", ["general", "opening", "purchases", "sales", "cash_receipts", "cash_disbursements"]);
+
 export const cashflowCategoriesEnum = pgEnum("cashflow_categories", ["operating", "investing", "financing"]);
 
 export const usersTable = pgTable("users", {
@@ -36,6 +38,7 @@ export const journalsTable = pgTable("journals", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
     companyId: t.integer("company_id").notNull().references(() => companiesTable.id, { onDelete: "cascade" }),
     number: t.varchar().notNull(),
+    type: journalTypesEnum().notNull(),
     date: t.date().notNull(),
     description: t.text(),
     createdAt: t.timestamp("created_at").defaultNow(),
