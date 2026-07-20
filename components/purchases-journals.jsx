@@ -1,6 +1,7 @@
 import Decimal from "decimal.js";
 import { SquarePen, Trash2 } from "lucide-react";
 import Link from "next/link";
+import PurchasesJournalDeleteForm from "@/components/purchases-journal-delete-form";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -176,7 +177,7 @@ export default async function PurchasesJournals({ companyId, journals }) {
                                         <Trash2 size={16} color="oklch(63.7% 0.237 25.331)" />
                                     </DialogTrigger>
                                     <DialogContent>
-                                        {/* <GeneralJournalDeleteForm journal={row.journals} /> */}
+                                        <PurchasesJournalDeleteForm journal={{ id: row.id, number: row.number }} />
                                     </DialogContent>
                                 </Dialog>
                             </TableCell>
