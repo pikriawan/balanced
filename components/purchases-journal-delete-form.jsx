@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useState } from "react";
-import { deletePurchasesJournal } from "@/actions/journal";
+import { deleteJournal } from "@/actions/journal";
 import Button from "@/components/ui/button";
 import { DialogClose, DialogContext } from "@/components/ui/dialog";
 
@@ -16,7 +16,7 @@ export default function PurchasesJournalDeleteForm({ journal }) {
         setIsPending(true);
         setError(null);
 
-        const response = await deletePurchasesJournal(journal.id);
+        const response = await deleteJournal(journal.id);
 
         setIsPending(false);
 

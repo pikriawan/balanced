@@ -42,7 +42,7 @@ export async function getOpeningJournals(companyId) {
     return result;
 }
 
-export async function getGeneralJournals(companyId, start_date, end_date) {
+export async function getJournals(companyId, start_date, end_date, type) {
     const session = await auth();
 
     if (!session?.user) {
@@ -59,7 +59,7 @@ export async function getGeneralJournals(companyId, start_date, end_date) {
         .where(
             and(
                 eq(journalsTable.companyId, companyId),
-                eq(journalsTable.type, "general"),
+                eq(journalsTable.type, type),
                 gte(journalsTable.date, new Date(start_date)),
                 lt(journalsTable.date, new Date(end_date))
             )
@@ -71,7 +71,7 @@ export async function getGeneralJournals(companyId, start_date, end_date) {
     return result;
 }
 
-export async function getGeneralJournal(companyId, journalId) {
+export async function getJournal(companyId, journalId, type) {
     const session = await auth();
 
     if (!session?.user) {
@@ -99,7 +99,7 @@ export async function getGeneralJournal(companyId, journalId) {
             and(
                 eq(journalsTable.id, journalId),
                 eq(journalsTable.companyId, companyId),
-                eq(journalsTable.type, "general")
+                eq(journalsTable.type, type)
             )
         );
 
@@ -121,7 +121,7 @@ export async function getGeneralJournal(companyId, journalId) {
     return journal;
 }
 
-export async function getLastGeneralJournalNumber(companyId, prefix = "JU") {
+export async function getLastJournalNumber(companyId, prefix, type) {
     const session = await auth();
 
     if (!session?.user) {
@@ -136,7 +136,7 @@ export async function getLastGeneralJournalNumber(companyId, prefix = "JU") {
         .where(
             and(
                 eq(journalsTable.companyId, companyId),
-                eq(journalsTable.type, "general")
+                eq(journalsTable.type, type)
             ),
             like(journalsTable.number, `${prefix}%`)
         )
@@ -152,83 +152,4 @@ export async function getLastGeneralJournalNumber(companyId, prefix = "JU") {
     number += 1;
 
     return prefix + number.toString().padStart(5, "0");
-}
-
-export async function getPurchasesJournals(companyId, start_date, end_date) {
-    const session = await auth();
-
-    if (!session?.user) {
-        return null;
-    }
-
-    if (new Date(start_date).toString() === "Invalid Date" || new Date(end_date).toString() === "Invalid Date") {
-        return [];
-    }
-
-    let result = await db
-        .select()
-        .from(journalsTable)
-        .where(
-            and(
-                eq(journalsTable.companyId, companyId),
-                eq(journalsTable.type, "purchases"),
-                gte(journalsTable.date, new Date(start_date)),
-                lt(journalsTable.date, new Date(end_date))
-            )
-        )
-        .orderBy(journalsTable.date, journalsTable.id, journalLinesTable.position)
-        .leftJoin(journalLinesTable, eq(journalsTable.id, journalLinesTable.journalId))
-        .leftJoin(accountsTable, eq(accountsTable.id, journalLinesTable.accountId));
-
-    return result;
-}
-
-export async function getPurchasesJournal(companyId, journalId) {
-    const session = await auth();
-
-    if (!session?.user) {
-        return null;
-    }
-
-    let result = await db
-        .select({ id: companiesTable.id })
-        .from(companiesTable)
-        .where(
-            and(
-                eq(companiesTable.id, companyId),
-                eq(companiesTable.userId, session.user.id)
-            )
-        );
-
-    if (result.length === 0) {
-        return null;
-    }
-
-    result = await db
-        .select()
-        .from(journalsTable)
-        .where(
-            and(
-                eq(journalsTable.id, journalId),
-                eq(journalsTable.companyId, companyId),
-                eq(journalsTable.type, "purchases")
-            )
-        );
-
-    if (result.length === 0) {
-        return null;
-    }
-
-    const journal = result[0];
-
-    result = await db
-        .select()
-        .from(journalLinesTable)
-        .where(eq(journalLinesTable.journalId, journal.id))
-        .orderBy(journalLinesTable.position)
-        .leftJoin(accountsTable, eq(accountsTable.id, journalLinesTable.accountId));
-
-    journal.journalLines = result;
-
-    return journal;
 }

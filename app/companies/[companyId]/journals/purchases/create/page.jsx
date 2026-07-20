@@ -2,12 +2,12 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import PurchasesJournalCreateForm from "@/components/purchases-journal-create-form";
 import { getAccounts } from "@/data/account";
-import { getLastGeneralJournalNumber } from "@/data/journal";
+import { getLastJournalNumber } from "@/data/journal";
 
 export default async function PurchasesJournalCreatePage({ params }) {
     const { companyId } = await params;
     const accounts = await getAccounts(companyId);
-    const lastJournalNumber = await getLastGeneralJournalNumber(companyId, "PB");
+    const lastJournalNumber = await getLastJournalNumber(companyId, "PB", "purchases");
 
     return (
         <div className="p-4 flex flex-col items-start gap-4">

@@ -2,14 +2,12 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import GeneralJournalEditForm from "@/components/general-journal-edit-form";
 import { getAccounts } from "@/data/account";
-import { getCompany } from "@/data/company";
-import { getGeneralJournal } from "@/data/journal";
+import { getJournal } from "@/data/journal";
 
 export default async function GeneralJournalEditPage({ params }) {
     const { companyId, journalId } = await params;
-    const company = await getCompany(companyId);
-    const accounts = await getAccounts(company.id);
-    const journal = await getGeneralJournal(company.id, journalId);
+    const accounts = await getAccounts(companyId);
+    const journal = await getJournal(companyId, journalId, "general");
 
     return (
         <div className="p-4 flex flex-col items-start gap-4">
@@ -19,7 +17,7 @@ export default async function GeneralJournalEditPage({ params }) {
                 </Link>
                 <h2 className="font-medium text-2xl">Edit Jurnal</h2>
             </div>
-            <GeneralJournalEditForm companyId={company.id} accounts={accounts} journal={journal} />
+            <GeneralJournalEditForm companyId={companyId} accounts={accounts} journal={journal} />
         </div>
     );
 }
