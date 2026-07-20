@@ -182,3 +182,53 @@ export async function getPurchasesJournals(companyId, start_date, end_date) {
 
     return result;
 }
+
+export async function getPurchasesJournal(companyId, journalId) {
+    const session = await auth();
+
+    if (!session?.user) {
+        return null;
+    }
+
+    let result = await db
+        .select({ id: companiesTable.id })
+        .from(companiesTable)
+        .where(
+            and(
+                eq(companiesTable.id, companyId),
+                eq(companiesTable.userId, session.user.id)
+            )
+        );
+
+    if (result.length === 0) {
+        return null;
+    }
+
+    result = await db
+        .select()
+        .from(journalsTable)
+        .where(
+            and(
+                eq(journalsTable.id, journalId),
+                eq(journalsTable.companyId, companyId),
+                eq(journalsTable.type, "purchases")
+            )
+        );
+
+    if (result.length === 0) {
+        return null;
+    }
+
+    const journal = result[0];
+
+    result = await db
+        .select()
+        .from(journalLinesTable)
+        .where(eq(journalLinesTable.journalId, journal.id))
+        .orderBy(journalLinesTable.position)
+        .leftJoin(accountsTable, eq(accountsTable.id, journalLinesTable.accountId));
+
+    journal.journalLines = result;
+
+    return journal;
+}
