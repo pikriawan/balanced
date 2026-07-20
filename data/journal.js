@@ -154,3 +154,32 @@ export async function getLastGeneralJournalNumber(companyId) {
 
     return prefix + number.toString().padStart(5, "0");
 }
+
+export async function getPurchasesJournals(companyId, start_date, end_date) {
+    const session = await auth();
+
+    if (!session?.user) {
+        return null;
+    }
+
+    if (new Date(start_date).toString() === "Invalid Date" || new Date(end_date).toString() === "Invalid Date") {
+        return [];
+    }
+
+    let result = await db
+        .select()
+        .from(journalsTable)
+        .where(
+            and(
+                eq(journalsTable.companyId, companyId),
+                eq(journalsTable.type, "purchases"),
+                gte(journalsTable.date, new Date(start_date)),
+                lt(journalsTable.date, new Date(end_date))
+            )
+        )
+        .orderBy(journalsTable.date, journalsTable.id, journalLinesTable.position)
+        .leftJoin(journalLinesTable, eq(journalsTable.id, journalLinesTable.journalId))
+        .leftJoin(accountsTable, eq(accountsTable.id, journalLinesTable.accountId));
+
+    return result;
+}
