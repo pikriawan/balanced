@@ -1,7 +1,7 @@
 import Decimal from "decimal.js";
 import { SquarePen, Trash2 } from "lucide-react";
 import Link from "next/link";
-import PurchasesJournalDeleteForm from "@/components/purchases-journal-delete-form";
+import SpecialJournalDeleteForm from "@/components/special-journal-delete-form";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -55,7 +55,7 @@ function getAccountBalance(cell) {
     return cell ? formatRupiahFromString(cell) : "-";
 }
 
-export default async function PurchasesJournals({ companyId, journals }) {
+export default async function SpecialJournals({ companyId, journals, type }) {
     const debitColumns = [
         ...(new Set(
             journals
@@ -169,7 +169,7 @@ export default async function PurchasesJournals({ companyId, journals }) {
                                 <TableCell key={col} hAlign="end">{getAccountBalance(Object.values(row.accounts).find((a) => a.name === col)?.credit?.toString())}</TableCell>
                             ))}
                             <TableCell>
-                                <Link href={`/companies/${companyId}/journals/purchases/edit/${row.id}`}>
+                                <Link href={`/companies/${companyId}/journals/${type}/edit/${row.id}`}>
                                     <SquarePen size={16} color="oklch(98.5% 0 0)" />
                                 </Link>
                                 <Dialog>
@@ -177,7 +177,7 @@ export default async function PurchasesJournals({ companyId, journals }) {
                                         <Trash2 size={16} color="oklch(63.7% 0.237 25.331)" />
                                     </DialogTrigger>
                                     <DialogContent>
-                                        <PurchasesJournalDeleteForm journal={{ id: row.id, number: row.number }} />
+                                        <SpecialJournalDeleteForm journal={{ id: row.id, number: row.number }} />
                                     </DialogContent>
                                 </Dialog>
                             </TableCell>

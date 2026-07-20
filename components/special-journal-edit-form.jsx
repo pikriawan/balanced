@@ -2,7 +2,7 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { createJournal } from "@/actions/journal";
+import { editJournal } from "@/actions/journal";
 import Button from "@/components/ui/button";
 import ButtonLink from "@/components/ui/button-link";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -10,21 +10,13 @@ import Select from "@/components/ui/select";
 import TextArea from "@/components/ui/text-area";
 import TextField from "@/components/ui/text-field";
 
-export default function PurchasesJournalCreateForm({ companyId, accounts, lastJournalNumber }) {
-    const [journalLines, setJournalLines] = useState([
-        {
-            id: 0,
-            accountId: "",
-            debit: "",
-            credit: ""
-        },
-        {
-            id: 1,
-            accountId: "",
-            debit: "",
-            credit: ""
-        }
-    ]);
+export default function SpecialJournalEditForm({ companyId, accounts, journal, type }) {
+    const [journalLines, setJournalLines] = useState(journal.journalLines.map((j, i) => ({
+        id: i,
+        accountId: j.accounts.id,
+        debit: j.journal_lines.debit,
+        credit: j.journal_lines.credit
+    })));
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
     const autoFocusRef = useRef(null);
@@ -39,7 +31,7 @@ export default function PurchasesJournalCreateForm({ companyId, accounts, lastJo
         setIsPending(true);
         setError(null);
 
-        const response = await createJournal(companyId, formData, "purchases");
+        const response = await editJournal(companyId, journal.id, formData, type);
 
         setIsPending(false);
 
@@ -59,7 +51,7 @@ export default function PurchasesJournalCreateForm({ companyId, accounts, lastJo
         <form className="w-full flex flex-col items-start gap-4" onSubmit={onSubmit}>
             <Field className="w-full">
                 <FieldLabel htmlFor="journalCreate_date">Tanggal</FieldLabel>
-                <TextField className="w-full max-w-3xs" id="journalCreate_date" name="date" type="date" ref={autoFocusRef} />
+                <TextField className="w-full max-w-3xs" id="journalCreate_date" name="date" type="date" ref={autoFocusRef} defaultValue={journal.date} />
                 {error?.date?.length > 0 && (
                     <Field>
                         {error.date.map((e) => (
@@ -70,7 +62,7 @@ export default function PurchasesJournalCreateForm({ companyId, accounts, lastJo
             </Field>
             <Field className="w-full">
                 <FieldLabel htmlFor="journalCreate_number">Nomor jurnal</FieldLabel>
-                <TextField className="w-full max-w-3xs" id="journalCreate_number" name="number" placeholder="JU00001" defaultValue={lastJournalNumber} />
+                <TextField className="w-full max-w-3xs" id="journalCreate_number" name="number" placeholder="JU00001" defaultValue={journal.number} />
                 {error?.number?.length > 0 && (
                     <Field>
                         {error.number.map((e) => (
@@ -81,7 +73,7 @@ export default function PurchasesJournalCreateForm({ companyId, accounts, lastJo
             </Field>
             <Field className="w-full">
                 <FieldLabel htmlFor="journalCreate_description">Keterangan</FieldLabel>
-                <TextArea className="w-full max-w-3xs" id="journalCreate_description" name="description" placeholder="Keterangan" />
+                <TextArea className="w-full max-w-3xs" id="journalCreate_description" name="description" placeholder="Keterangan" defaultValue={journal.description} />
                 {error?.description?.length > 0 && (
                     <Field>
                         {error.description.map((e) => (
@@ -196,7 +188,7 @@ export default function PurchasesJournalCreateForm({ companyId, accounts, lastJo
                 <p className="text-red-500 text-sm" key={error}>{error}</p>
             )}
             <div className="grid grid-cols-2 gap-4">
-                <ButtonLink className="w-full justify-center" href={`/companies/${companyId}/journals/purchases`} variant="outlined" disabled={isPending}>
+                <ButtonLink className="w-full justify-center" href={`/companies/${companyId}/journals/${type}`} variant="outlined" disabled={isPending}>
                     <span className="truncate">
                         Batal
                     </span>

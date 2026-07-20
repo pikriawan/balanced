@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react";
 import DateFilter from "@/components/date-filter";
-import PurchasesJournals from "@/components/purchases-journals";
+import SpecialJournal from "@/components/special-journals";
 import ButtonLink from "@/components/ui/button-link";
 import { getJournals } from "@/data/journal";
 
@@ -17,7 +17,7 @@ export default async function PurchasesJournalPage({ params, searchParams }) {
                 Buat jurnal baru
             </ButtonLink>
             <DateFilter />
-            <PurchasesJournals journals={journals} companyId={companyId} />
+            <SpecialJournal journals={journals} companyId={companyId} type="purchases" />
         </div>
     );
 }

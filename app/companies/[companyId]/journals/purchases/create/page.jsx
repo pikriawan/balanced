@@ -1,6 +1,6 @@
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import PurchasesJournalCreateForm from "@/components/purchases-journal-create-form";
+import SpecialJournalCreateForm from "@/components/special-journal-create-form";
 import { getAccounts } from "@/data/account";
 import { getLastJournalNumber } from "@/data/journal";
 
@@ -17,7 +17,7 @@ export default async function PurchasesJournalCreatePage({ params }) {
                 </Link>
                 <h2 className="font-medium text-2xl">Buat Jurnal Baru</h2>
             </div>
-            <PurchasesJournalCreateForm companyId={companyId} accounts={accounts} lastJournalNumber={lastJournalNumber} />
+            <SpecialJournalCreateForm companyId={companyId} accounts={accounts} lastJournalNumber={lastJournalNumber} type="purchases" />
         </div>
     );
 }

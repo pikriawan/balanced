@@ -1,6 +1,6 @@
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import PurchasesJournalEditForm from "@/components/purchases-journal-edit-form";
+import SpecialJournalEditForm from "@/components/special-journal-edit-form";
 import { getAccounts } from "@/data/account";
 import { getJournal } from "@/data/journal";
 
@@ -17,7 +17,7 @@ export default async function GeneralJournalEditPage({ params }) {
                 </Link>
                 <h2 className="font-medium text-2xl">Edit Jurnal</h2>
             </div>
-            <PurchasesJournalEditForm companyId={companyId} accounts={accounts} journal={journal} />
+            <SpecialJournalEditForm companyId={companyId} accounts={accounts} journal={journal} type="purchases" />
         </div>
     );
 }
