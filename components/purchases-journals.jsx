@@ -59,7 +59,7 @@ export default async function PurchasesJournals({ companyId, journals }) {
         ...(new Set(
             journals
                 .filter((row) => !(new Decimal(row.journal_lines.debit).isZero()))
-                .toSorted((a, b) => parseInt(a.code) - parseInt(b.code))
+                .toSorted((a, b) => a.accounts.code.localeCompare(b.accounts.code))
                 .map((row) => row.accounts.name)
         ).values())
     ];
@@ -68,7 +68,7 @@ export default async function PurchasesJournals({ companyId, journals }) {
         ...(new Set(
             journals
                 .filter((row) => !(new Decimal(row.journal_lines.credit).isZero()))
-                .toSorted((a, b) => parseInt(a.code) - parseInt(b.code))
+                .toSorted((a, b) => a.accounts.code.localeCompare(b.accounts.code))
                 .map((row) => row.accounts.name)
         ).values())
     ];

@@ -121,14 +121,13 @@ export async function getGeneralJournal(companyId, journalId) {
     return journal;
 }
 
-export async function getLastGeneralJournalNumber(companyId) {
+export async function getLastGeneralJournalNumber(companyId, prefix = "JU") {
     const session = await auth();
 
     if (!session?.user) {
         return null;
     }
 
-    const prefix = "JU";
     let number;
 
     let result = await db
