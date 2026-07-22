@@ -54,7 +54,7 @@ export default function CompanyCreateForm() {
             </Field>
             <Field>
                 <FieldLabel htmlFor="createCompany_firstMonth">Bulan mulai pembukuan</FieldLabel>
-                <Select id="createCompany_firstMonth" name="firstMonth" defaultValue={new Date().getMonth()}>
+                <Select id="createCompany_firstMonth" name="firstMonth" defaultValue={new Date().getMonth() + 1}>
                     <option value="">Pilih bulan mulai pembukuan</option>
                     <option value="1">Januari</option>
                     <option value="2">Februari</option>
