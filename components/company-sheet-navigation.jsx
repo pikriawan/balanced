@@ -71,7 +71,6 @@ export default function CompanySheetNavigation({ className, company, ...props })
             <NavigationLink pathname={pathname} href={`/companies/${company.id}/ledger`}>Buku Besar</NavigationLink>
             <NavigationGroup name="Laporan" pathname={pathname} startPathname={`/companies/${company.id}/reports`}>
                 <NavigationLink pathname={pathname} href={`/companies/${company.id}/reports/income-statement`}>Laba Rugi</NavigationLink>
-                <NavigationLink pathname={pathname} href={`/companies/${company.id}/reports/statement-of-changes-in-equity`}>Perubahan Modal</NavigationLink>
                 <NavigationLink pathname={pathname} href={`/companies/${company.id}/reports/balance-sheet`}>Neraca</NavigationLink>
                 <NavigationLink pathname={pathname} href={`/companies/${company.id}/reports/cash-flow-statement`}>Arus Kas</NavigationLink>
             </NavigationGroup>

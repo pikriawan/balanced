@@ -14,8 +14,6 @@ export default function AccountCreateForm({ companyId }) {
     const [error, setError] = useState(null);
     const [isAsset, setIsAsset] = useState(false);
     const [isEquity, setIsEquity] = useState(false);
-    const [isCapital, setIsCapital] = useState(false);
-    const [isDrawing, setIsDrawing] = useState(false);
     const { isShow, setIsShow } = useContext(DialogContext);
     const autoFocusRef = useRef(null);
 
@@ -105,57 +103,6 @@ export default function AccountCreateForm({ companyId }) {
                         </Field>
                     )}
                 </Field>
-            )}
-            {isEquity && (
-                <>
-                    <Field>
-                        <FieldLabel htmlFor="createAccount_isCapital">Termasuk akun modal?</FieldLabel>
-                        <Switch
-                            id="createAccount_isCapital"
-                            name="isCapital"
-                            isEnabled={isCapital}
-                            onChange={(value) => {
-                                if (isDrawing && value) {
-                                    setIsDrawing(false);
-                                }
-
-                                setIsCapital(value);
-                            }}
-                        />
-                        {error?.isCapital?.length > 0 && (
-                            <Field>
-                                {error.isCapital.map((e) => (
-                                    <p className="text-red-500 text-sm" key={e}>{e}</p>
-                                ))}
-                            </Field>
-                        )}
-                    </Field>
-                    <Field>
-                        <FieldLabel htmlFor="createAccount_isDrawing">Termasuk akun prive?</FieldLabel>
-                        <Switch
-                            id="createAccount_isDrawing"
-                            name="isDrawing"
-                            isEnabled={isDrawing}
-                            onChange={(value) => {
-                                if (isCapital && value) {
-                                    setIsCapital(false);
-                                }
-
-                                setIsDrawing(value);
-                            }}
-                        />
-                        {error?.isDrawing?.length > 0 && (
-                            <Field>
-                                {error.isDrawing.map((e) => (
-                                    <p className="text-red-500 text-sm" key={e}>{e}</p>
-                                ))}
-                            </Field>
-                        )}
-                    </Field>
-                </>
-            )}
-            {error && typeof error === "string" && (
-                <p className="text-red-500 text-sm" key={error}>{error}</p>
             )}
             <div className="grid grid-cols-2 gap-4">
                 <DialogClose>
