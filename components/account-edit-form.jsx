@@ -13,7 +13,6 @@ export default function AccountEditForm({ account }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
     const [isAsset, setIsAsset] = useState(account.type === "asset");
-    const [isEquity, setIsEquity] = useState(account.type === "equity");
     const { isShow, setIsShow } = useContext(DialogContext);
     const autoFocusRef = useRef(null);
 

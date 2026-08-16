@@ -13,7 +13,6 @@ export default function AccountCreateForm({ companyId }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
     const [isAsset, setIsAsset] = useState(false);
-    const [isEquity, setIsEquity] = useState(false);
     const { isShow, setIsShow } = useContext(DialogContext);
     const autoFocusRef = useRef(null);
 
